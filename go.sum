@@ -62,17 +62,11 @@ github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q
 github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
 github.com/NpoolPlatform/api-manager v0.0.0-20220421114434-bf0e069b0c83 h1:eCBDqxMZ80eHjjFVX7M9UwMq8mOqRvkkuvQco4WAHaE=
 github.com/NpoolPlatform/api-manager v0.0.0-20220421114434-bf0e069b0c83/go.mod h1:Z7h/p6Dsv0WaS2Ig3esHVtoIcv1xC9vXVIs2PK6kM8o=
-github.com/NpoolPlatform/cloud-hashing-goods v0.0.0-20220725072531-4aa2ed56923c h1:MswbdRZU2hfmWShYHEPtG84Y3q1ISdMqWksqq6Qsw1g=
-github.com/NpoolPlatform/cloud-hashing-goods v0.0.0-20220725072531-4aa2ed56923c/go.mod h1:aFvLR1M7HtXB2A0hyC7q83/H8WPv9jJaw30XrhSKNFI=
 github.com/NpoolPlatform/cloud-hashing-inspire v0.0.0-20220724104912-5495b0c02d63 h1:7An2Wwkz+eiRWPiHdkdT8f1lMMfQveFJUsTSO76Tai8=
 github.com/NpoolPlatform/cloud-hashing-inspire v0.0.0-20220724104912-5495b0c02d63/go.mod h1:9BYfVsnbQEJrwOYpJgE0ycq/bONhkO1nfJ8YGFCxZT8=
-github.com/NpoolPlatform/cloud-hashing-order v0.0.0-20220724100245-c13847eff60c h1:a6iagdL5Pl4XWaZ+znfMcXV/Hs/XDa+M8H26v47zakY=
-github.com/NpoolPlatform/cloud-hashing-order v0.0.0-20220724100245-c13847eff60c/go.mod h1:aiQdNT5LdIw0OHTxQrEqYp/Z8+vrdvcyKvyadaOwzPo=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220120091626-4e8035637592/go.mod h1:JqrktA7gNQe/Uprnr6DCs5UCFpheCZ30lDd0OkyRtC4=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220722111225-08c2156ac8bf h1:HX2tl99WkC7Q0x2MxGpfFYeaWk0PX+GdxEoFrWgZAxI=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220722111225-08c2156ac8bf/go.mod h1:o9I+ipazkngO2E5yC7LOdLTA6nlvf4uTUMOOZ2sRiRU=
-github.com/NpoolPlatform/ledger-manager v0.0.0-20220725013303-51e65b263313 h1:iAfE69P5yxWVyfhjzyU37UBSHiAJaxkNdrJT1BWvAVQ=
-github.com/NpoolPlatform/ledger-manager v0.0.0-20220725013303-51e65b263313/go.mod h1:GhG0BfWx1FEMJNDeqJlbRkK4XB4St2kvrzWIR0/LK+o=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5 h1:JF3d0OshTe/tHBKflk2x71N83ZgwxNF+EjApSa6qm1M=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5/go.mod h1:zvvqlRwbOdTUauPQ9dFDhDuxa91ILV0CQfVdPBZj+eA=
 github.com/NpoolPlatform/message v0.0.0-20220120075427-38182760a780/go.mod h1:tnsf7zHQ5Mv2uG0ezOwCfm/bxluiRW10DeuIl4SjG4Y=
