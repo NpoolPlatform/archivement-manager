@@ -14,7 +14,7 @@ import (
 
 	testinit "github.com/NpoolPlatform/archivement-manager/pkg/testinit"
 	valuedef "github.com/NpoolPlatform/message/npool"
-	npool "github.com/NpoolPlatform/message/npool/archivementmgr/detail"
+	npool "github.com/NpoolPlatform/message/npool/archivement/mgr/v1/detail"
 	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/assert"
