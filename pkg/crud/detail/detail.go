@@ -16,7 +16,7 @@ import (
 	"github.com/NpoolPlatform/archivement-manager/pkg/db/ent"
 	"github.com/NpoolPlatform/archivement-manager/pkg/db/ent/detail"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	npool "github.com/NpoolPlatform/message/npool/archivement/mgr/v1/detail"
+	npool "github.com/NpoolPlatform/message/npool/inspire/mgr/v1/archivement/detail"
 
 	"github.com/google/uuid"
 )

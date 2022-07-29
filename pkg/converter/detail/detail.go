@@ -2,7 +2,7 @@ package detail
 
 import (
 	"github.com/NpoolPlatform/archivement-manager/pkg/db/ent"
-	npool "github.com/NpoolPlatform/message/npool/archivement/mgr/v1/detail"
+	npool "github.com/NpoolPlatform/message/npool/inspire/mgr/v1/archivement/detail"
 )
 
 func Ent2Grpc(row *ent.Detail) *npool.Detail {
