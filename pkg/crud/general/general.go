@@ -237,6 +237,18 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 			return nil, fmt.Errorf("invalid general field")
 		}
 	}
+	if conds.UserIDs != nil {
+		switch conds.GetUserIDs().GetOp() {
+		case cruder.IN:
+			users := []uuid.UUID{}
+			for _, user := range conds.GetUserIDs().GetValue() {
+				users = append(users, uuid.MustParse(user))
+			}
+			stm.Where(general.UserIDIn(users...))
+		default:
+			return nil, fmt.Errorf("invalid general field")
+		}
+	}
 	if conds.GoodID != nil {
 		switch conds.GetGoodID().GetOp() {
 		case cruder.EQ:
