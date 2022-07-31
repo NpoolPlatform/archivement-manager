@@ -60,7 +60,28 @@ func (General) Fields() []ent.Field {
 			Optional().
 			Default(0),
 		field.
-			Float("amount").
+			Float("total_amount").
+			GoType(decimal.Decimal{}).
+			SchemaType(map[string]string{
+				dialect.MySQL: "decimal(37, 18)",
+			}).
+			Optional(),
+		field.
+			Float("self_amount").
+			GoType(decimal.Decimal{}).
+			SchemaType(map[string]string{
+				dialect.MySQL: "decimal(37, 18)",
+			}).
+			Optional(),
+		field.
+			Float("total_commission").
+			GoType(decimal.Decimal{}).
+			SchemaType(map[string]string{
+				dialect.MySQL: "decimal(37, 18)",
+			}).
+			Optional(),
+		field.
+			Float("self_commission").
 			GoType(decimal.Decimal{}).
 			SchemaType(map[string]string{
 				dialect.MySQL: "decimal(37, 18)",

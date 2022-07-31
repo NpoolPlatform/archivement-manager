@@ -30,8 +30,14 @@ const (
 	FieldTotalUnits = "total_units"
 	// FieldSelfUnits holds the string denoting the self_units field in the database.
 	FieldSelfUnits = "self_units"
-	// FieldAmount holds the string denoting the amount field in the database.
-	FieldAmount = "amount"
+	// FieldTotalAmount holds the string denoting the total_amount field in the database.
+	FieldTotalAmount = "total_amount"
+	// FieldSelfAmount holds the string denoting the self_amount field in the database.
+	FieldSelfAmount = "self_amount"
+	// FieldTotalCommission holds the string denoting the total_commission field in the database.
+	FieldTotalCommission = "total_commission"
+	// FieldSelfCommission holds the string denoting the self_commission field in the database.
+	FieldSelfCommission = "self_commission"
 	// Table holds the table name of the general in the database.
 	Table = "generals"
 )
@@ -48,7 +54,10 @@ var Columns = []string{
 	FieldCoinTypeID,
 	FieldTotalUnits,
 	FieldSelfUnits,
-	FieldAmount,
+	FieldTotalAmount,
+	FieldSelfAmount,
+	FieldTotalCommission,
+	FieldSelfCommission,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

@@ -218,30 +218,111 @@ func (gu *GeneralUpdate) ClearSelfUnits() *GeneralUpdate {
 	return gu
 }
 
-// SetAmount sets the "amount" field.
-func (gu *GeneralUpdate) SetAmount(d decimal.Decimal) *GeneralUpdate {
-	gu.mutation.ResetAmount()
-	gu.mutation.SetAmount(d)
+// SetTotalAmount sets the "total_amount" field.
+func (gu *GeneralUpdate) SetTotalAmount(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.ResetTotalAmount()
+	gu.mutation.SetTotalAmount(d)
 	return gu
 }
 
-// SetNillableAmount sets the "amount" field if the given value is not nil.
-func (gu *GeneralUpdate) SetNillableAmount(d *decimal.Decimal) *GeneralUpdate {
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (gu *GeneralUpdate) SetNillableTotalAmount(d *decimal.Decimal) *GeneralUpdate {
 	if d != nil {
-		gu.SetAmount(*d)
+		gu.SetTotalAmount(*d)
 	}
 	return gu
 }
 
-// AddAmount adds d to the "amount" field.
-func (gu *GeneralUpdate) AddAmount(d decimal.Decimal) *GeneralUpdate {
-	gu.mutation.AddAmount(d)
+// AddTotalAmount adds d to the "total_amount" field.
+func (gu *GeneralUpdate) AddTotalAmount(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.AddTotalAmount(d)
 	return gu
 }
 
-// ClearAmount clears the value of the "amount" field.
-func (gu *GeneralUpdate) ClearAmount() *GeneralUpdate {
-	gu.mutation.ClearAmount()
+// ClearTotalAmount clears the value of the "total_amount" field.
+func (gu *GeneralUpdate) ClearTotalAmount() *GeneralUpdate {
+	gu.mutation.ClearTotalAmount()
+	return gu
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (gu *GeneralUpdate) SetSelfAmount(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.ResetSelfAmount()
+	gu.mutation.SetSelfAmount(d)
+	return gu
+}
+
+// SetNillableSelfAmount sets the "self_amount" field if the given value is not nil.
+func (gu *GeneralUpdate) SetNillableSelfAmount(d *decimal.Decimal) *GeneralUpdate {
+	if d != nil {
+		gu.SetSelfAmount(*d)
+	}
+	return gu
+}
+
+// AddSelfAmount adds d to the "self_amount" field.
+func (gu *GeneralUpdate) AddSelfAmount(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.AddSelfAmount(d)
+	return gu
+}
+
+// ClearSelfAmount clears the value of the "self_amount" field.
+func (gu *GeneralUpdate) ClearSelfAmount() *GeneralUpdate {
+	gu.mutation.ClearSelfAmount()
+	return gu
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (gu *GeneralUpdate) SetTotalCommission(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.ResetTotalCommission()
+	gu.mutation.SetTotalCommission(d)
+	return gu
+}
+
+// SetNillableTotalCommission sets the "total_commission" field if the given value is not nil.
+func (gu *GeneralUpdate) SetNillableTotalCommission(d *decimal.Decimal) *GeneralUpdate {
+	if d != nil {
+		gu.SetTotalCommission(*d)
+	}
+	return gu
+}
+
+// AddTotalCommission adds d to the "total_commission" field.
+func (gu *GeneralUpdate) AddTotalCommission(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.AddTotalCommission(d)
+	return gu
+}
+
+// ClearTotalCommission clears the value of the "total_commission" field.
+func (gu *GeneralUpdate) ClearTotalCommission() *GeneralUpdate {
+	gu.mutation.ClearTotalCommission()
+	return gu
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (gu *GeneralUpdate) SetSelfCommission(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.ResetSelfCommission()
+	gu.mutation.SetSelfCommission(d)
+	return gu
+}
+
+// SetNillableSelfCommission sets the "self_commission" field if the given value is not nil.
+func (gu *GeneralUpdate) SetNillableSelfCommission(d *decimal.Decimal) *GeneralUpdate {
+	if d != nil {
+		gu.SetSelfCommission(*d)
+	}
+	return gu
+}
+
+// AddSelfCommission adds d to the "self_commission" field.
+func (gu *GeneralUpdate) AddSelfCommission(d decimal.Decimal) *GeneralUpdate {
+	gu.mutation.AddSelfCommission(d)
+	return gu
+}
+
+// ClearSelfCommission clears the value of the "self_commission" field.
+func (gu *GeneralUpdate) ClearSelfCommission() *GeneralUpdate {
+	gu.mutation.ClearSelfCommission()
 	return gu
 }
 
@@ -471,24 +552,84 @@ func (gu *GeneralUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: general.FieldSelfUnits,
 		})
 	}
-	if value, ok := gu.mutation.Amount(); ok {
+	if value, ok := gu.mutation.TotalAmount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
 		})
 	}
-	if value, ok := gu.mutation.AddedAmount(); ok {
+	if value, ok := gu.mutation.AddedTotalAmount(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
 		})
 	}
-	if gu.mutation.AmountCleared() {
+	if gu.mutation.TotalAmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
+		})
+	}
+	if value, ok := gu.mutation.SelfAmount(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if value, ok := gu.mutation.AddedSelfAmount(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if gu.mutation.SelfAmountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if value, ok := gu.mutation.TotalCommission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if value, ok := gu.mutation.AddedTotalCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if gu.mutation.TotalCommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if value, ok := gu.mutation.SelfCommission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfCommission,
+		})
+	}
+	if value, ok := gu.mutation.AddedSelfCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfCommission,
+		})
+	}
+	if gu.mutation.SelfCommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldSelfCommission,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
@@ -699,30 +840,111 @@ func (guo *GeneralUpdateOne) ClearSelfUnits() *GeneralUpdateOne {
 	return guo
 }
 
-// SetAmount sets the "amount" field.
-func (guo *GeneralUpdateOne) SetAmount(d decimal.Decimal) *GeneralUpdateOne {
-	guo.mutation.ResetAmount()
-	guo.mutation.SetAmount(d)
+// SetTotalAmount sets the "total_amount" field.
+func (guo *GeneralUpdateOne) SetTotalAmount(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.ResetTotalAmount()
+	guo.mutation.SetTotalAmount(d)
 	return guo
 }
 
-// SetNillableAmount sets the "amount" field if the given value is not nil.
-func (guo *GeneralUpdateOne) SetNillableAmount(d *decimal.Decimal) *GeneralUpdateOne {
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (guo *GeneralUpdateOne) SetNillableTotalAmount(d *decimal.Decimal) *GeneralUpdateOne {
 	if d != nil {
-		guo.SetAmount(*d)
+		guo.SetTotalAmount(*d)
 	}
 	return guo
 }
 
-// AddAmount adds d to the "amount" field.
-func (guo *GeneralUpdateOne) AddAmount(d decimal.Decimal) *GeneralUpdateOne {
-	guo.mutation.AddAmount(d)
+// AddTotalAmount adds d to the "total_amount" field.
+func (guo *GeneralUpdateOne) AddTotalAmount(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.AddTotalAmount(d)
 	return guo
 }
 
-// ClearAmount clears the value of the "amount" field.
-func (guo *GeneralUpdateOne) ClearAmount() *GeneralUpdateOne {
-	guo.mutation.ClearAmount()
+// ClearTotalAmount clears the value of the "total_amount" field.
+func (guo *GeneralUpdateOne) ClearTotalAmount() *GeneralUpdateOne {
+	guo.mutation.ClearTotalAmount()
+	return guo
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (guo *GeneralUpdateOne) SetSelfAmount(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.ResetSelfAmount()
+	guo.mutation.SetSelfAmount(d)
+	return guo
+}
+
+// SetNillableSelfAmount sets the "self_amount" field if the given value is not nil.
+func (guo *GeneralUpdateOne) SetNillableSelfAmount(d *decimal.Decimal) *GeneralUpdateOne {
+	if d != nil {
+		guo.SetSelfAmount(*d)
+	}
+	return guo
+}
+
+// AddSelfAmount adds d to the "self_amount" field.
+func (guo *GeneralUpdateOne) AddSelfAmount(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.AddSelfAmount(d)
+	return guo
+}
+
+// ClearSelfAmount clears the value of the "self_amount" field.
+func (guo *GeneralUpdateOne) ClearSelfAmount() *GeneralUpdateOne {
+	guo.mutation.ClearSelfAmount()
+	return guo
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (guo *GeneralUpdateOne) SetTotalCommission(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.ResetTotalCommission()
+	guo.mutation.SetTotalCommission(d)
+	return guo
+}
+
+// SetNillableTotalCommission sets the "total_commission" field if the given value is not nil.
+func (guo *GeneralUpdateOne) SetNillableTotalCommission(d *decimal.Decimal) *GeneralUpdateOne {
+	if d != nil {
+		guo.SetTotalCommission(*d)
+	}
+	return guo
+}
+
+// AddTotalCommission adds d to the "total_commission" field.
+func (guo *GeneralUpdateOne) AddTotalCommission(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.AddTotalCommission(d)
+	return guo
+}
+
+// ClearTotalCommission clears the value of the "total_commission" field.
+func (guo *GeneralUpdateOne) ClearTotalCommission() *GeneralUpdateOne {
+	guo.mutation.ClearTotalCommission()
+	return guo
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (guo *GeneralUpdateOne) SetSelfCommission(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.ResetSelfCommission()
+	guo.mutation.SetSelfCommission(d)
+	return guo
+}
+
+// SetNillableSelfCommission sets the "self_commission" field if the given value is not nil.
+func (guo *GeneralUpdateOne) SetNillableSelfCommission(d *decimal.Decimal) *GeneralUpdateOne {
+	if d != nil {
+		guo.SetSelfCommission(*d)
+	}
+	return guo
+}
+
+// AddSelfCommission adds d to the "self_commission" field.
+func (guo *GeneralUpdateOne) AddSelfCommission(d decimal.Decimal) *GeneralUpdateOne {
+	guo.mutation.AddSelfCommission(d)
+	return guo
+}
+
+// ClearSelfCommission clears the value of the "self_commission" field.
+func (guo *GeneralUpdateOne) ClearSelfCommission() *GeneralUpdateOne {
+	guo.mutation.ClearSelfCommission()
 	return guo
 }
 
@@ -976,24 +1198,84 @@ func (guo *GeneralUpdateOne) sqlSave(ctx context.Context) (_node *General, err e
 			Column: general.FieldSelfUnits,
 		})
 	}
-	if value, ok := guo.mutation.Amount(); ok {
+	if value, ok := guo.mutation.TotalAmount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
 		})
 	}
-	if value, ok := guo.mutation.AddedAmount(); ok {
+	if value, ok := guo.mutation.AddedTotalAmount(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
 		})
 	}
-	if guo.mutation.AmountCleared() {
+	if guo.mutation.TotalAmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
+		})
+	}
+	if value, ok := guo.mutation.SelfAmount(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if value, ok := guo.mutation.AddedSelfAmount(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if guo.mutation.SelfAmountCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldSelfAmount,
+		})
+	}
+	if value, ok := guo.mutation.TotalCommission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if value, ok := guo.mutation.AddedTotalCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if guo.mutation.TotalCommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldTotalCommission,
+		})
+	}
+	if value, ok := guo.mutation.SelfCommission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfCommission,
+		})
+	}
+	if value, ok := guo.mutation.AddedSelfCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfCommission,
+		})
+	}
+	if guo.mutation.SelfCommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: general.FieldSelfCommission,
 		})
 	}
 	_node = &General{config: guo.config}

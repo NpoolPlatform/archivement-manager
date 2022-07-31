@@ -150,16 +150,58 @@ func (gc *GeneralCreate) SetNillableSelfUnits(u *uint32) *GeneralCreate {
 	return gc
 }
 
-// SetAmount sets the "amount" field.
-func (gc *GeneralCreate) SetAmount(d decimal.Decimal) *GeneralCreate {
-	gc.mutation.SetAmount(d)
+// SetTotalAmount sets the "total_amount" field.
+func (gc *GeneralCreate) SetTotalAmount(d decimal.Decimal) *GeneralCreate {
+	gc.mutation.SetTotalAmount(d)
 	return gc
 }
 
-// SetNillableAmount sets the "amount" field if the given value is not nil.
-func (gc *GeneralCreate) SetNillableAmount(d *decimal.Decimal) *GeneralCreate {
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (gc *GeneralCreate) SetNillableTotalAmount(d *decimal.Decimal) *GeneralCreate {
 	if d != nil {
-		gc.SetAmount(*d)
+		gc.SetTotalAmount(*d)
+	}
+	return gc
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (gc *GeneralCreate) SetSelfAmount(d decimal.Decimal) *GeneralCreate {
+	gc.mutation.SetSelfAmount(d)
+	return gc
+}
+
+// SetNillableSelfAmount sets the "self_amount" field if the given value is not nil.
+func (gc *GeneralCreate) SetNillableSelfAmount(d *decimal.Decimal) *GeneralCreate {
+	if d != nil {
+		gc.SetSelfAmount(*d)
+	}
+	return gc
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (gc *GeneralCreate) SetTotalCommission(d decimal.Decimal) *GeneralCreate {
+	gc.mutation.SetTotalCommission(d)
+	return gc
+}
+
+// SetNillableTotalCommission sets the "total_commission" field if the given value is not nil.
+func (gc *GeneralCreate) SetNillableTotalCommission(d *decimal.Decimal) *GeneralCreate {
+	if d != nil {
+		gc.SetTotalCommission(*d)
+	}
+	return gc
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (gc *GeneralCreate) SetSelfCommission(d decimal.Decimal) *GeneralCreate {
+	gc.mutation.SetSelfCommission(d)
+	return gc
+}
+
+// SetNillableSelfCommission sets the "self_commission" field if the given value is not nil.
+func (gc *GeneralCreate) SetNillableSelfCommission(d *decimal.Decimal) *GeneralCreate {
+	if d != nil {
+		gc.SetSelfCommission(*d)
 	}
 	return gc
 }
@@ -438,13 +480,37 @@ func (gc *GeneralCreate) createSpec() (*General, *sqlgraph.CreateSpec) {
 		})
 		_node.SelfUnits = value
 	}
-	if value, ok := gc.mutation.Amount(); ok {
+	if value, ok := gc.mutation.TotalAmount(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: general.FieldAmount,
+			Column: general.FieldTotalAmount,
 		})
-		_node.Amount = value
+		_node.TotalAmount = value
+	}
+	if value, ok := gc.mutation.SelfAmount(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfAmount,
+		})
+		_node.SelfAmount = value
+	}
+	if value, ok := gc.mutation.TotalCommission(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldTotalCommission,
+		})
+		_node.TotalCommission = value
+	}
+	if value, ok := gc.mutation.SelfCommission(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: general.FieldSelfCommission,
+		})
+		_node.SelfCommission = value
 	}
 	return _node, _spec
 }
@@ -674,27 +740,99 @@ func (u *GeneralUpsert) ClearSelfUnits() *GeneralUpsert {
 	return u
 }
 
-// SetAmount sets the "amount" field.
-func (u *GeneralUpsert) SetAmount(v decimal.Decimal) *GeneralUpsert {
-	u.Set(general.FieldAmount, v)
+// SetTotalAmount sets the "total_amount" field.
+func (u *GeneralUpsert) SetTotalAmount(v decimal.Decimal) *GeneralUpsert {
+	u.Set(general.FieldTotalAmount, v)
 	return u
 }
 
-// UpdateAmount sets the "amount" field to the value that was provided on create.
-func (u *GeneralUpsert) UpdateAmount() *GeneralUpsert {
-	u.SetExcluded(general.FieldAmount)
+// UpdateTotalAmount sets the "total_amount" field to the value that was provided on create.
+func (u *GeneralUpsert) UpdateTotalAmount() *GeneralUpsert {
+	u.SetExcluded(general.FieldTotalAmount)
 	return u
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *GeneralUpsert) AddAmount(v decimal.Decimal) *GeneralUpsert {
-	u.Add(general.FieldAmount, v)
+// AddTotalAmount adds v to the "total_amount" field.
+func (u *GeneralUpsert) AddTotalAmount(v decimal.Decimal) *GeneralUpsert {
+	u.Add(general.FieldTotalAmount, v)
 	return u
 }
 
-// ClearAmount clears the value of the "amount" field.
-func (u *GeneralUpsert) ClearAmount() *GeneralUpsert {
-	u.SetNull(general.FieldAmount)
+// ClearTotalAmount clears the value of the "total_amount" field.
+func (u *GeneralUpsert) ClearTotalAmount() *GeneralUpsert {
+	u.SetNull(general.FieldTotalAmount)
+	return u
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (u *GeneralUpsert) SetSelfAmount(v decimal.Decimal) *GeneralUpsert {
+	u.Set(general.FieldSelfAmount, v)
+	return u
+}
+
+// UpdateSelfAmount sets the "self_amount" field to the value that was provided on create.
+func (u *GeneralUpsert) UpdateSelfAmount() *GeneralUpsert {
+	u.SetExcluded(general.FieldSelfAmount)
+	return u
+}
+
+// AddSelfAmount adds v to the "self_amount" field.
+func (u *GeneralUpsert) AddSelfAmount(v decimal.Decimal) *GeneralUpsert {
+	u.Add(general.FieldSelfAmount, v)
+	return u
+}
+
+// ClearSelfAmount clears the value of the "self_amount" field.
+func (u *GeneralUpsert) ClearSelfAmount() *GeneralUpsert {
+	u.SetNull(general.FieldSelfAmount)
+	return u
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (u *GeneralUpsert) SetTotalCommission(v decimal.Decimal) *GeneralUpsert {
+	u.Set(general.FieldTotalCommission, v)
+	return u
+}
+
+// UpdateTotalCommission sets the "total_commission" field to the value that was provided on create.
+func (u *GeneralUpsert) UpdateTotalCommission() *GeneralUpsert {
+	u.SetExcluded(general.FieldTotalCommission)
+	return u
+}
+
+// AddTotalCommission adds v to the "total_commission" field.
+func (u *GeneralUpsert) AddTotalCommission(v decimal.Decimal) *GeneralUpsert {
+	u.Add(general.FieldTotalCommission, v)
+	return u
+}
+
+// ClearTotalCommission clears the value of the "total_commission" field.
+func (u *GeneralUpsert) ClearTotalCommission() *GeneralUpsert {
+	u.SetNull(general.FieldTotalCommission)
+	return u
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (u *GeneralUpsert) SetSelfCommission(v decimal.Decimal) *GeneralUpsert {
+	u.Set(general.FieldSelfCommission, v)
+	return u
+}
+
+// UpdateSelfCommission sets the "self_commission" field to the value that was provided on create.
+func (u *GeneralUpsert) UpdateSelfCommission() *GeneralUpsert {
+	u.SetExcluded(general.FieldSelfCommission)
+	return u
+}
+
+// AddSelfCommission adds v to the "self_commission" field.
+func (u *GeneralUpsert) AddSelfCommission(v decimal.Decimal) *GeneralUpsert {
+	u.Add(general.FieldSelfCommission, v)
+	return u
+}
+
+// ClearSelfCommission clears the value of the "self_commission" field.
+func (u *GeneralUpsert) ClearSelfCommission() *GeneralUpsert {
+	u.SetNull(general.FieldSelfCommission)
 	return u
 }
 
@@ -951,31 +1089,115 @@ func (u *GeneralUpsertOne) ClearSelfUnits() *GeneralUpsertOne {
 	})
 }
 
-// SetAmount sets the "amount" field.
-func (u *GeneralUpsertOne) SetAmount(v decimal.Decimal) *GeneralUpsertOne {
+// SetTotalAmount sets the "total_amount" field.
+func (u *GeneralUpsertOne) SetTotalAmount(v decimal.Decimal) *GeneralUpsertOne {
 	return u.Update(func(s *GeneralUpsert) {
-		s.SetAmount(v)
+		s.SetTotalAmount(v)
 	})
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *GeneralUpsertOne) AddAmount(v decimal.Decimal) *GeneralUpsertOne {
+// AddTotalAmount adds v to the "total_amount" field.
+func (u *GeneralUpsertOne) AddTotalAmount(v decimal.Decimal) *GeneralUpsertOne {
 	return u.Update(func(s *GeneralUpsert) {
-		s.AddAmount(v)
+		s.AddTotalAmount(v)
 	})
 }
 
-// UpdateAmount sets the "amount" field to the value that was provided on create.
-func (u *GeneralUpsertOne) UpdateAmount() *GeneralUpsertOne {
+// UpdateTotalAmount sets the "total_amount" field to the value that was provided on create.
+func (u *GeneralUpsertOne) UpdateTotalAmount() *GeneralUpsertOne {
 	return u.Update(func(s *GeneralUpsert) {
-		s.UpdateAmount()
+		s.UpdateTotalAmount()
 	})
 }
 
-// ClearAmount clears the value of the "amount" field.
-func (u *GeneralUpsertOne) ClearAmount() *GeneralUpsertOne {
+// ClearTotalAmount clears the value of the "total_amount" field.
+func (u *GeneralUpsertOne) ClearTotalAmount() *GeneralUpsertOne {
 	return u.Update(func(s *GeneralUpsert) {
-		s.ClearAmount()
+		s.ClearTotalAmount()
+	})
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (u *GeneralUpsertOne) SetSelfAmount(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetSelfAmount(v)
+	})
+}
+
+// AddSelfAmount adds v to the "self_amount" field.
+func (u *GeneralUpsertOne) AddSelfAmount(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddSelfAmount(v)
+	})
+}
+
+// UpdateSelfAmount sets the "self_amount" field to the value that was provided on create.
+func (u *GeneralUpsertOne) UpdateSelfAmount() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateSelfAmount()
+	})
+}
+
+// ClearSelfAmount clears the value of the "self_amount" field.
+func (u *GeneralUpsertOne) ClearSelfAmount() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearSelfAmount()
+	})
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (u *GeneralUpsertOne) SetTotalCommission(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetTotalCommission(v)
+	})
+}
+
+// AddTotalCommission adds v to the "total_commission" field.
+func (u *GeneralUpsertOne) AddTotalCommission(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddTotalCommission(v)
+	})
+}
+
+// UpdateTotalCommission sets the "total_commission" field to the value that was provided on create.
+func (u *GeneralUpsertOne) UpdateTotalCommission() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateTotalCommission()
+	})
+}
+
+// ClearTotalCommission clears the value of the "total_commission" field.
+func (u *GeneralUpsertOne) ClearTotalCommission() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearTotalCommission()
+	})
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (u *GeneralUpsertOne) SetSelfCommission(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetSelfCommission(v)
+	})
+}
+
+// AddSelfCommission adds v to the "self_commission" field.
+func (u *GeneralUpsertOne) AddSelfCommission(v decimal.Decimal) *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddSelfCommission(v)
+	})
+}
+
+// UpdateSelfCommission sets the "self_commission" field to the value that was provided on create.
+func (u *GeneralUpsertOne) UpdateSelfCommission() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateSelfCommission()
+	})
+}
+
+// ClearSelfCommission clears the value of the "self_commission" field.
+func (u *GeneralUpsertOne) ClearSelfCommission() *GeneralUpsertOne {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearSelfCommission()
 	})
 }
 
@@ -1398,31 +1620,115 @@ func (u *GeneralUpsertBulk) ClearSelfUnits() *GeneralUpsertBulk {
 	})
 }
 
-// SetAmount sets the "amount" field.
-func (u *GeneralUpsertBulk) SetAmount(v decimal.Decimal) *GeneralUpsertBulk {
+// SetTotalAmount sets the "total_amount" field.
+func (u *GeneralUpsertBulk) SetTotalAmount(v decimal.Decimal) *GeneralUpsertBulk {
 	return u.Update(func(s *GeneralUpsert) {
-		s.SetAmount(v)
+		s.SetTotalAmount(v)
 	})
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *GeneralUpsertBulk) AddAmount(v decimal.Decimal) *GeneralUpsertBulk {
+// AddTotalAmount adds v to the "total_amount" field.
+func (u *GeneralUpsertBulk) AddTotalAmount(v decimal.Decimal) *GeneralUpsertBulk {
 	return u.Update(func(s *GeneralUpsert) {
-		s.AddAmount(v)
+		s.AddTotalAmount(v)
 	})
 }
 
-// UpdateAmount sets the "amount" field to the value that was provided on create.
-func (u *GeneralUpsertBulk) UpdateAmount() *GeneralUpsertBulk {
+// UpdateTotalAmount sets the "total_amount" field to the value that was provided on create.
+func (u *GeneralUpsertBulk) UpdateTotalAmount() *GeneralUpsertBulk {
 	return u.Update(func(s *GeneralUpsert) {
-		s.UpdateAmount()
+		s.UpdateTotalAmount()
 	})
 }
 
-// ClearAmount clears the value of the "amount" field.
-func (u *GeneralUpsertBulk) ClearAmount() *GeneralUpsertBulk {
+// ClearTotalAmount clears the value of the "total_amount" field.
+func (u *GeneralUpsertBulk) ClearTotalAmount() *GeneralUpsertBulk {
 	return u.Update(func(s *GeneralUpsert) {
-		s.ClearAmount()
+		s.ClearTotalAmount()
+	})
+}
+
+// SetSelfAmount sets the "self_amount" field.
+func (u *GeneralUpsertBulk) SetSelfAmount(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetSelfAmount(v)
+	})
+}
+
+// AddSelfAmount adds v to the "self_amount" field.
+func (u *GeneralUpsertBulk) AddSelfAmount(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddSelfAmount(v)
+	})
+}
+
+// UpdateSelfAmount sets the "self_amount" field to the value that was provided on create.
+func (u *GeneralUpsertBulk) UpdateSelfAmount() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateSelfAmount()
+	})
+}
+
+// ClearSelfAmount clears the value of the "self_amount" field.
+func (u *GeneralUpsertBulk) ClearSelfAmount() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearSelfAmount()
+	})
+}
+
+// SetTotalCommission sets the "total_commission" field.
+func (u *GeneralUpsertBulk) SetTotalCommission(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetTotalCommission(v)
+	})
+}
+
+// AddTotalCommission adds v to the "total_commission" field.
+func (u *GeneralUpsertBulk) AddTotalCommission(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddTotalCommission(v)
+	})
+}
+
+// UpdateTotalCommission sets the "total_commission" field to the value that was provided on create.
+func (u *GeneralUpsertBulk) UpdateTotalCommission() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateTotalCommission()
+	})
+}
+
+// ClearTotalCommission clears the value of the "total_commission" field.
+func (u *GeneralUpsertBulk) ClearTotalCommission() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearTotalCommission()
+	})
+}
+
+// SetSelfCommission sets the "self_commission" field.
+func (u *GeneralUpsertBulk) SetSelfCommission(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.SetSelfCommission(v)
+	})
+}
+
+// AddSelfCommission adds v to the "self_commission" field.
+func (u *GeneralUpsertBulk) AddSelfCommission(v decimal.Decimal) *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.AddSelfCommission(v)
+	})
+}
+
+// UpdateSelfCommission sets the "self_commission" field to the value that was provided on create.
+func (u *GeneralUpsertBulk) UpdateSelfCommission() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.UpdateSelfCommission()
+	})
+}
+
+// ClearSelfCommission clears the value of the "self_commission" field.
+func (u *GeneralUpsertBulk) ClearSelfCommission() *GeneralUpsertBulk {
+	return u.Update(func(s *GeneralUpsert) {
+		s.ClearSelfCommission()
 	})
 }
 

@@ -35,8 +35,14 @@ type General struct {
 	TotalUnits uint32 `json:"total_units,omitempty"`
 	// SelfUnits holds the value of the "self_units" field.
 	SelfUnits uint32 `json:"self_units,omitempty"`
-	// Amount holds the value of the "amount" field.
-	Amount decimal.Decimal `json:"amount,omitempty"`
+	// TotalAmount holds the value of the "total_amount" field.
+	TotalAmount decimal.Decimal `json:"total_amount,omitempty"`
+	// SelfAmount holds the value of the "self_amount" field.
+	SelfAmount decimal.Decimal `json:"self_amount,omitempty"`
+	// TotalCommission holds the value of the "total_commission" field.
+	TotalCommission decimal.Decimal `json:"total_commission,omitempty"`
+	// SelfCommission holds the value of the "self_commission" field.
+	SelfCommission decimal.Decimal `json:"self_commission,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -44,7 +50,7 @@ func (*General) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case general.FieldAmount:
+		case general.FieldTotalAmount, general.FieldSelfAmount, general.FieldTotalCommission, general.FieldSelfCommission:
 			values[i] = new(decimal.Decimal)
 		case general.FieldCreatedAt, general.FieldUpdatedAt, general.FieldDeletedAt, general.FieldTotalUnits, general.FieldSelfUnits:
 			values[i] = new(sql.NullInt64)
@@ -125,11 +131,29 @@ func (ge *General) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				ge.SelfUnits = uint32(value.Int64)
 			}
-		case general.FieldAmount:
+		case general.FieldTotalAmount:
 			if value, ok := values[i].(*decimal.Decimal); !ok {
-				return fmt.Errorf("unexpected type %T for field amount", values[i])
+				return fmt.Errorf("unexpected type %T for field total_amount", values[i])
 			} else if value != nil {
-				ge.Amount = *value
+				ge.TotalAmount = *value
+			}
+		case general.FieldSelfAmount:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field self_amount", values[i])
+			} else if value != nil {
+				ge.SelfAmount = *value
+			}
+		case general.FieldTotalCommission:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field total_commission", values[i])
+			} else if value != nil {
+				ge.TotalCommission = *value
+			}
+		case general.FieldSelfCommission:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field self_commission", values[i])
+			} else if value != nil {
+				ge.SelfCommission = *value
 			}
 		}
 	}
@@ -177,8 +201,14 @@ func (ge *General) String() string {
 	builder.WriteString(fmt.Sprintf("%v", ge.TotalUnits))
 	builder.WriteString(", self_units=")
 	builder.WriteString(fmt.Sprintf("%v", ge.SelfUnits))
-	builder.WriteString(", amount=")
-	builder.WriteString(fmt.Sprintf("%v", ge.Amount))
+	builder.WriteString(", total_amount=")
+	builder.WriteString(fmt.Sprintf("%v", ge.TotalAmount))
+	builder.WriteString(", self_amount=")
+	builder.WriteString(fmt.Sprintf("%v", ge.SelfAmount))
+	builder.WriteString(", total_commission=")
+	builder.WriteString(fmt.Sprintf("%v", ge.TotalCommission))
+	builder.WriteString(", self_commission=")
+	builder.WriteString(fmt.Sprintf("%v", ge.SelfCommission))
 	builder.WriteByte(')')
 	return builder.String()
 }

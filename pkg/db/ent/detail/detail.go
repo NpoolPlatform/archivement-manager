@@ -40,6 +40,8 @@ const (
 	FieldAmount = "amount"
 	// FieldUsdAmount holds the string denoting the usd_amount field in the database.
 	FieldUsdAmount = "usd_amount"
+	// FieldCommission holds the string denoting the commission field in the database.
+	FieldCommission = "commission"
 	// Table holds the table name of the detail in the database.
 	Table = "details"
 )
@@ -61,6 +63,7 @@ var Columns = []string{
 	FieldUnits,
 	FieldAmount,
 	FieldUsdAmount,
+	FieldCommission,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

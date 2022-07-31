@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func validate(info *npool.GeneralReq) error {
+func validate(info *npool.GeneralReq) error { //nolint
 	if info.AppID == nil {
 		logger.Sugar().Errorw("validate", "AppID", info.AppID)
 		return status.Error(codes.InvalidArgument, "AppID is empty")
@@ -54,15 +54,51 @@ func validate(info *npool.GeneralReq) error {
 		return status.Error(codes.InvalidArgument, fmt.Sprintf("CoinTypeID is invalid: %v", err))
 	}
 
-	if info.Amount != nil {
-		amount, err := decimal.NewFromString(info.GetAmount())
+	if info.TotalAmount != nil {
+		amount, err := decimal.NewFromString(info.GetTotalAmount())
 		if err != nil {
-			logger.Sugar().Errorw("validate", "Amount", info.GetAmount(), "error", err)
-			return status.Error(codes.InvalidArgument, fmt.Sprintf("Amount is invalid: %v", err))
+			logger.Sugar().Errorw("validate", "TotalAmount", info.GetTotalAmount(), "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("TotalAmount is invalid: %v", err))
 		}
 		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
-			logger.Sugar().Errorw("validate", "Amount", info.GetAmount(), "error", "less than 0")
-			return status.Error(codes.InvalidArgument, "Amount is less than 0")
+			logger.Sugar().Errorw("validate", "TotalAmount", info.GetTotalAmount(), "error", "less than 0")
+			return status.Error(codes.InvalidArgument, "TotalAmount is less than 0")
+		}
+	}
+
+	if info.SelfAmount != nil {
+		amount, err := decimal.NewFromString(info.GetSelfAmount())
+		if err != nil {
+			logger.Sugar().Errorw("validate", "SelfAmount", info.GetSelfAmount(), "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("SelfAmount is invalid: %v", err))
+		}
+		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
+			logger.Sugar().Errorw("validate", "SelfAmount", info.GetSelfAmount(), "error", "less than 0")
+			return status.Error(codes.InvalidArgument, "SelfAmount is less than 0")
+		}
+	}
+
+	if info.TotalCommission != nil {
+		amount, err := decimal.NewFromString(info.GetTotalCommission())
+		if err != nil {
+			logger.Sugar().Errorw("validate", "TotalCommission", info.GetTotalCommission(), "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("TotalCommission is invalid: %v", err))
+		}
+		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
+			logger.Sugar().Errorw("validate", "TotalCommission", info.GetTotalCommission(), "error", "less than 0")
+			return status.Error(codes.InvalidArgument, "TotalCommission is less than 0")
+		}
+	}
+
+	if info.SelfCommission != nil {
+		amount, err := decimal.NewFromString(info.GetSelfCommission())
+		if err != nil {
+			logger.Sugar().Errorw("validate", "SelfCommission", info.GetSelfCommission(), "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("SelfCommission is invalid: %v", err))
+		}
+		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
+			logger.Sugar().Errorw("validate", "SelfCommission", info.GetSelfCommission(), "error", "less than 0")
+			return status.Error(codes.InvalidArgument, "SelfCommission is less than 0")
 		}
 	}
 
@@ -82,6 +118,9 @@ func duplicate(infos []*npool.GeneralReq) error {
 		if _, ok := keys[key]; ok {
 			return status.Error(codes.InvalidArgument, "Infos has duplicate AppID:UserID:CoinTypeID")
 		}
+
+		keys[key] = struct{}{}
+		apps[info.GetAppID()] = struct{}{}
 	}
 
 	if len(apps) > 1 {

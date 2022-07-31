@@ -155,10 +155,31 @@ func SelfUnits(v uint32) predicate.General {
 	})
 }
 
-// Amount applies equality check predicate on the "amount" field. It's identical to AmountEQ.
-func Amount(v decimal.Decimal) predicate.General {
+// TotalAmount applies equality check predicate on the "total_amount" field. It's identical to TotalAmountEQ.
+func TotalAmount(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAmount), v))
+		s.Where(sql.EQ(s.C(FieldTotalAmount), v))
+	})
+}
+
+// SelfAmount applies equality check predicate on the "self_amount" field. It's identical to SelfAmountEQ.
+func SelfAmount(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfAmount), v))
+	})
+}
+
+// TotalCommission applies equality check predicate on the "total_commission" field. It's identical to TotalCommissionEQ.
+func TotalCommission(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTotalCommission), v))
+	})
+}
+
+// SelfCommission applies equality check predicate on the "self_commission" field. It's identical to SelfCommissionEQ.
+func SelfCommission(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfCommission), v))
 	})
 }
 
@@ -930,22 +951,22 @@ func SelfUnitsNotNil() predicate.General {
 	})
 }
 
-// AmountEQ applies the EQ predicate on the "amount" field.
-func AmountEQ(v decimal.Decimal) predicate.General {
+// TotalAmountEQ applies the EQ predicate on the "total_amount" field.
+func TotalAmountEQ(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAmount), v))
+		s.Where(sql.EQ(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountNEQ applies the NEQ predicate on the "amount" field.
-func AmountNEQ(v decimal.Decimal) predicate.General {
+// TotalAmountNEQ applies the NEQ predicate on the "total_amount" field.
+func TotalAmountNEQ(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldAmount), v))
+		s.Where(sql.NEQ(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountIn applies the In predicate on the "amount" field.
-func AmountIn(vs ...decimal.Decimal) predicate.General {
+// TotalAmountIn applies the In predicate on the "total_amount" field.
+func TotalAmountIn(vs ...decimal.Decimal) predicate.General {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -957,12 +978,12 @@ func AmountIn(vs ...decimal.Decimal) predicate.General {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldAmount), v...))
+		s.Where(sql.In(s.C(FieldTotalAmount), v...))
 	})
 }
 
-// AmountNotIn applies the NotIn predicate on the "amount" field.
-func AmountNotIn(vs ...decimal.Decimal) predicate.General {
+// TotalAmountNotIn applies the NotIn predicate on the "total_amount" field.
+func TotalAmountNotIn(vs ...decimal.Decimal) predicate.General {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -974,49 +995,319 @@ func AmountNotIn(vs ...decimal.Decimal) predicate.General {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldAmount), v...))
+		s.Where(sql.NotIn(s.C(FieldTotalAmount), v...))
 	})
 }
 
-// AmountGT applies the GT predicate on the "amount" field.
-func AmountGT(v decimal.Decimal) predicate.General {
+// TotalAmountGT applies the GT predicate on the "total_amount" field.
+func TotalAmountGT(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldAmount), v))
+		s.Where(sql.GT(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountGTE applies the GTE predicate on the "amount" field.
-func AmountGTE(v decimal.Decimal) predicate.General {
+// TotalAmountGTE applies the GTE predicate on the "total_amount" field.
+func TotalAmountGTE(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldAmount), v))
+		s.Where(sql.GTE(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountLT applies the LT predicate on the "amount" field.
-func AmountLT(v decimal.Decimal) predicate.General {
+// TotalAmountLT applies the LT predicate on the "total_amount" field.
+func TotalAmountLT(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldAmount), v))
+		s.Where(sql.LT(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountLTE applies the LTE predicate on the "amount" field.
-func AmountLTE(v decimal.Decimal) predicate.General {
+// TotalAmountLTE applies the LTE predicate on the "total_amount" field.
+func TotalAmountLTE(v decimal.Decimal) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldAmount), v))
+		s.Where(sql.LTE(s.C(FieldTotalAmount), v))
 	})
 }
 
-// AmountIsNil applies the IsNil predicate on the "amount" field.
-func AmountIsNil() predicate.General {
+// TotalAmountIsNil applies the IsNil predicate on the "total_amount" field.
+func TotalAmountIsNil() predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldAmount)))
+		s.Where(sql.IsNull(s.C(FieldTotalAmount)))
 	})
 }
 
-// AmountNotNil applies the NotNil predicate on the "amount" field.
-func AmountNotNil() predicate.General {
+// TotalAmountNotNil applies the NotNil predicate on the "total_amount" field.
+func TotalAmountNotNil() predicate.General {
 	return predicate.General(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldAmount)))
+		s.Where(sql.NotNull(s.C(FieldTotalAmount)))
+	})
+}
+
+// SelfAmountEQ applies the EQ predicate on the "self_amount" field.
+func SelfAmountEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountNEQ applies the NEQ predicate on the "self_amount" field.
+func SelfAmountNEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountIn applies the In predicate on the "self_amount" field.
+func SelfAmountIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSelfAmount), v...))
+	})
+}
+
+// SelfAmountNotIn applies the NotIn predicate on the "self_amount" field.
+func SelfAmountNotIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSelfAmount), v...))
+	})
+}
+
+// SelfAmountGT applies the GT predicate on the "self_amount" field.
+func SelfAmountGT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountGTE applies the GTE predicate on the "self_amount" field.
+func SelfAmountGTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountLT applies the LT predicate on the "self_amount" field.
+func SelfAmountLT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountLTE applies the LTE predicate on the "self_amount" field.
+func SelfAmountLTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSelfAmount), v))
+	})
+}
+
+// SelfAmountIsNil applies the IsNil predicate on the "self_amount" field.
+func SelfAmountIsNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSelfAmount)))
+	})
+}
+
+// SelfAmountNotNil applies the NotNil predicate on the "self_amount" field.
+func SelfAmountNotNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSelfAmount)))
+	})
+}
+
+// TotalCommissionEQ applies the EQ predicate on the "total_commission" field.
+func TotalCommissionEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionNEQ applies the NEQ predicate on the "total_commission" field.
+func TotalCommissionNEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionIn applies the In predicate on the "total_commission" field.
+func TotalCommissionIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldTotalCommission), v...))
+	})
+}
+
+// TotalCommissionNotIn applies the NotIn predicate on the "total_commission" field.
+func TotalCommissionNotIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldTotalCommission), v...))
+	})
+}
+
+// TotalCommissionGT applies the GT predicate on the "total_commission" field.
+func TotalCommissionGT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionGTE applies the GTE predicate on the "total_commission" field.
+func TotalCommissionGTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionLT applies the LT predicate on the "total_commission" field.
+func TotalCommissionLT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionLTE applies the LTE predicate on the "total_commission" field.
+func TotalCommissionLTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldTotalCommission), v))
+	})
+}
+
+// TotalCommissionIsNil applies the IsNil predicate on the "total_commission" field.
+func TotalCommissionIsNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldTotalCommission)))
+	})
+}
+
+// TotalCommissionNotNil applies the NotNil predicate on the "total_commission" field.
+func TotalCommissionNotNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldTotalCommission)))
+	})
+}
+
+// SelfCommissionEQ applies the EQ predicate on the "self_commission" field.
+func SelfCommissionEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionNEQ applies the NEQ predicate on the "self_commission" field.
+func SelfCommissionNEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionIn applies the In predicate on the "self_commission" field.
+func SelfCommissionIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSelfCommission), v...))
+	})
+}
+
+// SelfCommissionNotIn applies the NotIn predicate on the "self_commission" field.
+func SelfCommissionNotIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSelfCommission), v...))
+	})
+}
+
+// SelfCommissionGT applies the GT predicate on the "self_commission" field.
+func SelfCommissionGT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionGTE applies the GTE predicate on the "self_commission" field.
+func SelfCommissionGTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionLT applies the LT predicate on the "self_commission" field.
+func SelfCommissionLT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionLTE applies the LTE predicate on the "self_commission" field.
+func SelfCommissionLTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSelfCommission), v))
+	})
+}
+
+// SelfCommissionIsNil applies the IsNil predicate on the "self_commission" field.
+func SelfCommissionIsNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSelfCommission)))
+	})
+}
+
+// SelfCommissionNotNil applies the NotNil predicate on the "self_commission" field.
+func SelfCommissionNotNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSelfCommission)))
 	})
 }
 

@@ -190,6 +190,13 @@ func UsdAmount(v decimal.Decimal) predicate.Detail {
 	})
 }
 
+// Commission applies equality check predicate on the "commission" field. It's identical to CommissionEQ.
+func Commission(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCommission), v))
+	})
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v uint32) predicate.Detail {
 	return predicate.Detail(func(s *sql.Selector) {
@@ -1405,6 +1412,96 @@ func UsdAmountIsNil() predicate.Detail {
 func UsdAmountNotNil() predicate.Detail {
 	return predicate.Detail(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldUsdAmount)))
+	})
+}
+
+// CommissionEQ applies the EQ predicate on the "commission" field.
+func CommissionEQ(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionNEQ applies the NEQ predicate on the "commission" field.
+func CommissionNEQ(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionIn applies the In predicate on the "commission" field.
+func CommissionIn(vs ...decimal.Decimal) predicate.Detail {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Detail(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCommission), v...))
+	})
+}
+
+// CommissionNotIn applies the NotIn predicate on the "commission" field.
+func CommissionNotIn(vs ...decimal.Decimal) predicate.Detail {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Detail(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCommission), v...))
+	})
+}
+
+// CommissionGT applies the GT predicate on the "commission" field.
+func CommissionGT(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionGTE applies the GTE predicate on the "commission" field.
+func CommissionGTE(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionLT applies the LT predicate on the "commission" field.
+func CommissionLT(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionLTE applies the LTE predicate on the "commission" field.
+func CommissionLTE(v decimal.Decimal) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCommission), v))
+	})
+}
+
+// CommissionIsNil applies the IsNil predicate on the "commission" field.
+func CommissionIsNil() predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldCommission)))
+	})
+}
+
+// CommissionNotNil applies the NotNil predicate on the "commission" field.
+func CommissionNotNil() predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldCommission)))
 	})
 }
 

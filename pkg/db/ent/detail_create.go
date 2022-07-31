@@ -220,6 +220,20 @@ func (dc *DetailCreate) SetNillableUsdAmount(d *decimal.Decimal) *DetailCreate {
 	return dc
 }
 
+// SetCommission sets the "commission" field.
+func (dc *DetailCreate) SetCommission(d decimal.Decimal) *DetailCreate {
+	dc.mutation.SetCommission(d)
+	return dc
+}
+
+// SetNillableCommission sets the "commission" field if the given value is not nil.
+func (dc *DetailCreate) SetNillableCommission(d *decimal.Decimal) *DetailCreate {
+	if d != nil {
+		dc.SetCommission(*d)
+	}
+	return dc
+}
+
 // SetID sets the "id" field.
 func (dc *DetailCreate) SetID(u uuid.UUID) *DetailCreate {
 	dc.mutation.SetID(u)
@@ -551,6 +565,14 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 		})
 		_node.UsdAmount = value
 	}
+	if value, ok := dc.mutation.Commission(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: detail.FieldCommission,
+		})
+		_node.Commission = value
+	}
 	return _node, _spec
 }
 
@@ -878,6 +900,30 @@ func (u *DetailUpsert) AddUsdAmount(v decimal.Decimal) *DetailUpsert {
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (u *DetailUpsert) ClearUsdAmount() *DetailUpsert {
 	u.SetNull(detail.FieldUsdAmount)
+	return u
+}
+
+// SetCommission sets the "commission" field.
+func (u *DetailUpsert) SetCommission(v decimal.Decimal) *DetailUpsert {
+	u.Set(detail.FieldCommission, v)
+	return u
+}
+
+// UpdateCommission sets the "commission" field to the value that was provided on create.
+func (u *DetailUpsert) UpdateCommission() *DetailUpsert {
+	u.SetExcluded(detail.FieldCommission)
+	return u
+}
+
+// AddCommission adds v to the "commission" field.
+func (u *DetailUpsert) AddCommission(v decimal.Decimal) *DetailUpsert {
+	u.Add(detail.FieldCommission, v)
+	return u
+}
+
+// ClearCommission clears the value of the "commission" field.
+func (u *DetailUpsert) ClearCommission() *DetailUpsert {
+	u.SetNull(detail.FieldCommission)
 	return u
 }
 
@@ -1250,6 +1296,34 @@ func (u *DetailUpsertOne) UpdateUsdAmount() *DetailUpsertOne {
 func (u *DetailUpsertOne) ClearUsdAmount() *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
 		s.ClearUsdAmount()
+	})
+}
+
+// SetCommission sets the "commission" field.
+func (u *DetailUpsertOne) SetCommission(v decimal.Decimal) *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetCommission(v)
+	})
+}
+
+// AddCommission adds v to the "commission" field.
+func (u *DetailUpsertOne) AddCommission(v decimal.Decimal) *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.AddCommission(v)
+	})
+}
+
+// UpdateCommission sets the "commission" field to the value that was provided on create.
+func (u *DetailUpsertOne) UpdateCommission() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateCommission()
+	})
+}
+
+// ClearCommission clears the value of the "commission" field.
+func (u *DetailUpsertOne) ClearCommission() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearCommission()
 	})
 }
 
@@ -1788,6 +1862,34 @@ func (u *DetailUpsertBulk) UpdateUsdAmount() *DetailUpsertBulk {
 func (u *DetailUpsertBulk) ClearUsdAmount() *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
 		s.ClearUsdAmount()
+	})
+}
+
+// SetCommission sets the "commission" field.
+func (u *DetailUpsertBulk) SetCommission(v decimal.Decimal) *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetCommission(v)
+	})
+}
+
+// AddCommission adds v to the "commission" field.
+func (u *DetailUpsertBulk) AddCommission(v decimal.Decimal) *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.AddCommission(v)
+	})
+}
+
+// UpdateCommission sets the "commission" field to the value that was provided on create.
+func (u *DetailUpsertBulk) UpdateCommission() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateCommission()
+	})
+}
+
+// ClearCommission clears the value of the "commission" field.
+func (u *DetailUpsertBulk) ClearCommission() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearCommission()
 	})
 }
 

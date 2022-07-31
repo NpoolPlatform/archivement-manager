@@ -56,9 +56,12 @@ func Create(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) {
 			c.SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID()))
 		}
 
-		c.SetAmount(decimal.NewFromInt(0))
+		c.SetTotalAmount(decimal.NewFromInt(0))
+		c.SetSelfAmount(decimal.NewFromInt(0))
 		c.SetTotalUnits(0)
 		c.SetSelfUnits(0)
+		c.SetTotalCommission(decimal.NewFromInt(0))
+		c.SetSelfCommission(decimal.NewFromInt(0))
 
 		info, err = c.Save(_ctx)
 		return err
@@ -105,9 +108,12 @@ func CreateBulk(ctx context.Context, in []*npool.GeneralReq) ([]*ent.General, er
 			if info.CoinTypeID != nil {
 				bulk[i].SetCoinTypeID(uuid.MustParse(info.GetCoinTypeID()))
 			}
-			bulk[i].SetAmount(decimal.NewFromInt(0))
+			bulk[i].SetTotalAmount(decimal.NewFromInt(0))
+			bulk[i].SetSelfAmount(decimal.NewFromInt(0))
 			bulk[i].SetTotalUnits(0)
 			bulk[i].SetSelfUnits(0)
+			bulk[i].SetTotalCommission(decimal.NewFromInt(0))
+			bulk[i].SetSelfCommission(decimal.NewFromInt(0))
 		}
 		rows, err = tx.General.CreateBulk(bulk...).Save(_ctx)
 		return err
@@ -118,7 +124,7 @@ func CreateBulk(ctx context.Context, in []*npool.GeneralReq) ([]*ent.General, er
 	return rows, nil
 }
 
-func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) {
+func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) { //nolint
 	var info *ent.General
 	var err error
 
@@ -143,28 +149,73 @@ func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) 
 			return fmt.Errorf("fail query general: %v", err)
 		}
 
-		amount := decimal.NewFromInt(0)
-		if in.Amount != nil {
-			amount, err = decimal.NewFromString(in.GetAmount())
+		totalAmount := decimal.NewFromInt(0)
+		if in.TotalAmount != nil {
+			totalAmount, err = decimal.NewFromString(in.GetTotalAmount())
 			if err != nil {
 				return err
 			}
 		}
 
-		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
-			return fmt.Errorf("amount < 0")
+		if totalAmount.Cmp(decimal.NewFromInt(0)) < 0 {
+			return fmt.Errorf("TotalAmount < 0")
+		}
+
+		selfAmount := decimal.NewFromInt(0)
+		if in.SelfAmount != nil {
+			selfAmount, err = decimal.NewFromString(in.GetSelfAmount())
+			if err != nil {
+				return err
+			}
+		}
+
+		if selfAmount.Cmp(decimal.NewFromInt(0)) < 0 {
+			return fmt.Errorf("SelfAmount < 0")
+		}
+
+		totalCommission := decimal.NewFromInt(0)
+		if in.TotalCommission != nil {
+			totalCommission, err = decimal.NewFromString(in.GetTotalCommission())
+			if err != nil {
+				return err
+			}
+		}
+
+		if totalCommission.Cmp(decimal.NewFromInt(0)) < 0 {
+			return fmt.Errorf("TotalCommission < 0")
+		}
+
+		selfCommission := decimal.NewFromInt(0)
+		if in.SelfCommission != nil {
+			selfCommission, err = decimal.NewFromString(in.GetSelfCommission())
+			if err != nil {
+				return err
+			}
+		}
+
+		if selfCommission.Cmp(decimal.NewFromInt(0)) < 0 {
+			return fmt.Errorf("SelfCommission < 0")
 		}
 
 		stm := info.Update()
 
-		if in.Amount != nil {
-			stm = stm.AddAmount(amount)
+		if in.TotalAmount != nil {
+			stm = stm.AddTotalAmount(totalAmount)
+		}
+		if in.SelfAmount != nil {
+			stm = stm.AddSelfAmount(selfAmount)
 		}
 		if in.TotalUnits != nil {
 			stm = stm.AddTotalUnits(int32(in.GetTotalUnits()))
 		}
 		if in.SelfUnits != nil {
 			stm = stm.AddSelfUnits(int32(in.GetSelfUnits()))
+		}
+		if in.TotalCommission != nil {
+			stm = stm.AddTotalCommission(totalCommission)
+		}
+		if in.SelfCommission != nil {
+			stm = stm.AddSelfCommission(selfCommission)
 		}
 
 		info, err = stm.Save(_ctx)
@@ -265,18 +316,34 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 			return nil, fmt.Errorf("invalid general field")
 		}
 	}
-	if conds.Amount != nil {
-		incoming, err := decimal.NewFromString(conds.GetAmount().GetValue())
+	if conds.TotalAmount != nil {
+		incoming, err := decimal.NewFromString(conds.GetTotalAmount().GetValue())
 		if err != nil {
 			return nil, err
 		}
-		switch conds.GetAmount().GetOp() {
+		switch conds.GetTotalAmount().GetOp() {
 		case cruder.LT:
-			stm.Where(general.AmountLT(incoming))
+			stm.Where(general.TotalAmountLT(incoming))
 		case cruder.GT:
-			stm.Where(general.AmountGT(incoming))
+			stm.Where(general.TotalAmountGT(incoming))
 		case cruder.EQ:
-			stm.Where(general.AmountEQ(incoming))
+			stm.Where(general.TotalAmountEQ(incoming))
+		default:
+			return nil, fmt.Errorf("invalid general field")
+		}
+	}
+	if conds.SelfAmount != nil {
+		incoming, err := decimal.NewFromString(conds.GetSelfAmount().GetValue())
+		if err != nil {
+			return nil, err
+		}
+		switch conds.GetSelfAmount().GetOp() {
+		case cruder.LT:
+			stm.Where(general.SelfAmountLT(incoming))
+		case cruder.GT:
+			stm.Where(general.SelfAmountGT(incoming))
+		case cruder.EQ:
+			stm.Where(general.SelfAmountEQ(incoming))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}
@@ -301,6 +368,38 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 			stm.Where(general.SelfUnitsGT(conds.GetSelfUnits().GetValue()))
 		case cruder.EQ:
 			stm.Where(general.SelfUnitsEQ(conds.GetSelfUnits().GetValue()))
+		default:
+			return nil, fmt.Errorf("invalid general field")
+		}
+	}
+	if conds.TotalCommission != nil {
+		incoming, err := decimal.NewFromString(conds.GetTotalCommission().GetValue())
+		if err != nil {
+			return nil, err
+		}
+		switch conds.GetTotalCommission().GetOp() {
+		case cruder.LT:
+			stm.Where(general.TotalCommissionLT(incoming))
+		case cruder.GT:
+			stm.Where(general.TotalCommissionGT(incoming))
+		case cruder.EQ:
+			stm.Where(general.TotalCommissionEQ(incoming))
+		default:
+			return nil, fmt.Errorf("invalid general field")
+		}
+	}
+	if conds.SelfCommission != nil {
+		incoming, err := decimal.NewFromString(conds.GetSelfCommission().GetValue())
+		if err != nil {
+			return nil, err
+		}
+		switch conds.GetSelfCommission().GetOp() {
+		case cruder.LT:
+			stm.Where(general.SelfCommissionLT(incoming))
+		case cruder.GT:
+			stm.Where(general.SelfCommissionGT(incoming))
+		case cruder.EQ:
+			stm.Where(general.SelfCommissionEQ(incoming))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}

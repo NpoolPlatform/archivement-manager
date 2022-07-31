@@ -30,35 +30,44 @@ func init() {
 }
 
 var entity = ent.General{
-	ID:         uuid.New(),
-	AppID:      uuid.New(),
-	UserID:     uuid.New(),
-	GoodID:     uuid.New(),
-	CoinTypeID: uuid.New(),
-	Amount:     decimal.NewFromInt(0),
-	TotalUnits: 0,
-	SelfUnits:  0,
+	ID:              uuid.New(),
+	AppID:           uuid.New(),
+	UserID:          uuid.New(),
+	GoodID:          uuid.New(),
+	CoinTypeID:      uuid.New(),
+	TotalAmount:     decimal.NewFromInt(0),
+	SelfAmount:      decimal.NewFromInt(0),
+	TotalUnits:      0,
+	SelfUnits:       0,
+	TotalCommission: decimal.NewFromInt(0),
+	SelfCommission:  decimal.NewFromInt(0),
 }
 
 var (
-	id         = entity.ID.String()
-	appID      = entity.AppID.String()
-	userID     = entity.UserID.String()
-	goodID     = entity.GoodID.String()
-	coinTypeID = entity.CoinTypeID.String()
-	amount     = entity.Amount.String()
-	totalUnits = entity.TotalUnits
-	selfUnits  = entity.SelfUnits
+	id              = entity.ID.String()
+	appID           = entity.AppID.String()
+	userID          = entity.UserID.String()
+	goodID          = entity.GoodID.String()
+	coinTypeID      = entity.CoinTypeID.String()
+	totalAmount     = entity.TotalAmount.String()
+	selfAmount      = entity.SelfAmount.String()
+	totalUnits      = entity.TotalUnits
+	selfUnits       = entity.SelfUnits
+	totalCommission = entity.TotalCommission.String()
+	selfCommission  = entity.SelfCommission.String()
 
 	req = npool.GeneralReq{
-		ID:         &id,
-		AppID:      &appID,
-		UserID:     &userID,
-		GoodID:     &goodID,
-		CoinTypeID: &coinTypeID,
-		Amount:     &amount,
-		TotalUnits: &totalUnits,
-		SelfUnits:  &selfUnits,
+		ID:              &id,
+		AppID:           &appID,
+		UserID:          &userID,
+		GoodID:          &goodID,
+		CoinTypeID:      &coinTypeID,
+		TotalAmount:     &totalAmount,
+		SelfAmount:      &selfAmount,
+		TotalUnits:      &totalUnits,
+		SelfUnits:       &selfUnits,
+		TotalCommission: &totalCommission,
+		SelfCommission:  &selfCommission,
 	}
 )
 
@@ -77,24 +86,30 @@ func create(t *testing.T) {
 func createBulk(t *testing.T) {
 	entities := []*ent.General{
 		{
-			ID:         uuid.New(),
-			AppID:      uuid.New(),
-			UserID:     uuid.New(),
-			GoodID:     uuid.New(),
-			CoinTypeID: uuid.New(),
-			Amount:     decimal.NewFromInt(0),
-			TotalUnits: 1,
-			SelfUnits:  1,
+			ID:              uuid.New(),
+			AppID:           uuid.New(),
+			UserID:          uuid.New(),
+			GoodID:          uuid.New(),
+			CoinTypeID:      uuid.New(),
+			TotalAmount:     decimal.NewFromInt(0),
+			SelfAmount:      decimal.NewFromInt(0),
+			TotalUnits:      1,
+			SelfUnits:       1,
+			TotalCommission: decimal.NewFromInt(0),
+			SelfCommission:  decimal.NewFromInt(0),
 		},
 		{
-			ID:         uuid.New(),
-			AppID:      uuid.New(),
-			UserID:     uuid.New(),
-			GoodID:     uuid.New(),
-			CoinTypeID: uuid.New(),
-			Amount:     decimal.NewFromInt(0),
-			TotalUnits: 2,
-			SelfUnits:  0,
+			ID:              uuid.New(),
+			AppID:           uuid.New(),
+			UserID:          uuid.New(),
+			GoodID:          uuid.New(),
+			CoinTypeID:      uuid.New(),
+			TotalAmount:     decimal.NewFromInt(0),
+			SelfAmount:      decimal.NewFromInt(0),
+			TotalUnits:      2,
+			SelfUnits:       0,
+			TotalCommission: decimal.NewFromInt(0),
+			SelfCommission:  decimal.NewFromInt(0),
 		},
 	}
 
@@ -105,19 +120,25 @@ func createBulk(t *testing.T) {
 		_userID := _entity.UserID.String()
 		_goodID := _entity.GoodID.String()
 		_coinTypeID := _entity.CoinTypeID.String()
-		_amount := _entity.Amount.String()
+		_totalAmount := _entity.TotalAmount.String()
+		_selfAmount := _entity.SelfAmount.String()
 		_totalUnits := _entity.TotalUnits
 		_selfUnits := _entity.SelfUnits
+		_totalCommission := _entity.TotalCommission.String()
+		_selfCommission := _entity.SelfCommission.String()
 
 		reqs = append(reqs, &npool.GeneralReq{
-			ID:         &_id,
-			AppID:      &_appID,
-			UserID:     &_userID,
-			GoodID:     &_goodID,
-			CoinTypeID: &_coinTypeID,
-			Amount:     &_amount,
-			TotalUnits: &_totalUnits,
-			SelfUnits:  &_selfUnits,
+			ID:              &_id,
+			AppID:           &_appID,
+			UserID:          &_userID,
+			GoodID:          &_goodID,
+			CoinTypeID:      &_coinTypeID,
+			TotalAmount:     &_totalAmount,
+			SelfAmount:      &_selfAmount,
+			TotalUnits:      &_totalUnits,
+			SelfUnits:       &_selfUnits,
+			TotalCommission: &_totalCommission,
+			SelfCommission:  &_selfCommission,
 		})
 	}
 	infos, err := CreateBulk(context.Background(), reqs)
@@ -127,17 +148,17 @@ func createBulk(t *testing.T) {
 }
 
 func add(t *testing.T) {
-	amount = "30"
+	totalAmount = "30"
 	totalUnits = 10
 	selfUnits = 10
 
-	req.Amount = &amount
-	req.SelfUnits = &totalUnits
-	req.TotalUnits = &selfUnits
+	req.TotalAmount = &totalAmount
+	req.SelfUnits = &selfUnits
+	req.TotalUnits = &totalUnits
 
-	entity.Amount, _ = decimal.NewFromString(amount)
-	entity.TotalUnits += totalUnits
-	entity.SelfUnits += selfUnits
+	entity.TotalAmount, _ = decimal.NewFromString(totalAmount)
+	entity.TotalUnits = totalUnits
+	entity.SelfUnits = selfUnits
 
 	info, err := AddFields(context.Background(), &req)
 	if assert.Nil(t, err) {

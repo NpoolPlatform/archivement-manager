@@ -332,6 +332,33 @@ func (du *DetailUpdate) ClearUsdAmount() *DetailUpdate {
 	return du
 }
 
+// SetCommission sets the "commission" field.
+func (du *DetailUpdate) SetCommission(d decimal.Decimal) *DetailUpdate {
+	du.mutation.ResetCommission()
+	du.mutation.SetCommission(d)
+	return du
+}
+
+// SetNillableCommission sets the "commission" field if the given value is not nil.
+func (du *DetailUpdate) SetNillableCommission(d *decimal.Decimal) *DetailUpdate {
+	if d != nil {
+		du.SetCommission(*d)
+	}
+	return du
+}
+
+// AddCommission adds d to the "commission" field.
+func (du *DetailUpdate) AddCommission(d decimal.Decimal) *DetailUpdate {
+	du.mutation.AddCommission(d)
+	return du
+}
+
+// ClearCommission clears the value of the "commission" field.
+func (du *DetailUpdate) ClearCommission() *DetailUpdate {
+	du.mutation.ClearCommission()
+	return du
+}
+
 // Mutation returns the DetailMutation object of the builder.
 func (du *DetailUpdate) Mutation() *DetailMutation {
 	return du.mutation
@@ -635,6 +662,26 @@ func (du *DetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Column: detail.FieldUsdAmount,
+		})
+	}
+	if value, ok := du.mutation.Commission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: detail.FieldCommission,
+		})
+	}
+	if value, ok := du.mutation.AddedCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: detail.FieldCommission,
+		})
+	}
+	if du.mutation.CommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: detail.FieldCommission,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, du.driver, _spec); err != nil {
@@ -956,6 +1003,33 @@ func (duo *DetailUpdateOne) AddUsdAmount(d decimal.Decimal) *DetailUpdateOne {
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (duo *DetailUpdateOne) ClearUsdAmount() *DetailUpdateOne {
 	duo.mutation.ClearUsdAmount()
+	return duo
+}
+
+// SetCommission sets the "commission" field.
+func (duo *DetailUpdateOne) SetCommission(d decimal.Decimal) *DetailUpdateOne {
+	duo.mutation.ResetCommission()
+	duo.mutation.SetCommission(d)
+	return duo
+}
+
+// SetNillableCommission sets the "commission" field if the given value is not nil.
+func (duo *DetailUpdateOne) SetNillableCommission(d *decimal.Decimal) *DetailUpdateOne {
+	if d != nil {
+		duo.SetCommission(*d)
+	}
+	return duo
+}
+
+// AddCommission adds d to the "commission" field.
+func (duo *DetailUpdateOne) AddCommission(d decimal.Decimal) *DetailUpdateOne {
+	duo.mutation.AddCommission(d)
+	return duo
+}
+
+// ClearCommission clears the value of the "commission" field.
+func (duo *DetailUpdateOne) ClearCommission() *DetailUpdateOne {
+	duo.mutation.ClearCommission()
 	return duo
 }
 
@@ -1286,6 +1360,26 @@ func (duo *DetailUpdateOne) sqlSave(ctx context.Context) (_node *Detail, err err
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Column: detail.FieldUsdAmount,
+		})
+	}
+	if value, ok := duo.mutation.Commission(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: detail.FieldCommission,
+		})
+	}
+	if value, ok := duo.mutation.AddedCommission(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: detail.FieldCommission,
+		})
+	}
+	if duo.mutation.CommissionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Column: detail.FieldCommission,
 		})
 	}
 	_node = &Detail{config: duo.config}

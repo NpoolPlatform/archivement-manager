@@ -25,6 +25,7 @@ var (
 		{Name: "units", Type: field.TypeUint32, Nullable: true, Default: 0},
 		{Name: "amount", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
 		{Name: "usd_amount", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
+		{Name: "commission", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
 	}
 	// DetailsTable holds the schema information for the "details" table.
 	DetailsTable = &schema.Table{
@@ -44,7 +45,10 @@ var (
 		{Name: "coin_type_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "total_units", Type: field.TypeUint32, Nullable: true, Default: 0},
 		{Name: "self_units", Type: field.TypeUint32, Nullable: true, Default: 0},
-		{Name: "amount", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
+		{Name: "total_amount", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
+		{Name: "self_amount", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
+		{Name: "total_commission", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
+		{Name: "self_commission", Type: field.TypeFloat64, Nullable: true, SchemaType: map[string]string{"mysql": "decimal(37, 18)"}},
 	}
 	// GeneralsTable holds the schema information for the "generals" table.
 	GeneralsTable = &schema.Table{

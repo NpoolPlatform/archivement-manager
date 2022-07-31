@@ -45,6 +45,8 @@ type Detail struct {
 	Amount decimal.Decimal `json:"amount,omitempty"`
 	// UsdAmount holds the value of the "usd_amount" field.
 	UsdAmount decimal.Decimal `json:"usd_amount,omitempty"`
+	// Commission holds the value of the "commission" field.
+	Commission decimal.Decimal `json:"commission,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -52,7 +54,7 @@ func (*Detail) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case detail.FieldPaymentCoinUsdCurrency, detail.FieldAmount, detail.FieldUsdAmount:
+		case detail.FieldPaymentCoinUsdCurrency, detail.FieldAmount, detail.FieldUsdAmount, detail.FieldCommission:
 			values[i] = new(decimal.Decimal)
 		case detail.FieldCreatedAt, detail.FieldUpdatedAt, detail.FieldDeletedAt, detail.FieldUnits:
 			values[i] = new(sql.NullInt64)
@@ -163,6 +165,12 @@ func (d *Detail) assignValues(columns []string, values []interface{}) error {
 			} else if value != nil {
 				d.UsdAmount = *value
 			}
+		case detail.FieldCommission:
+			if value, ok := values[i].(*decimal.Decimal); !ok {
+				return fmt.Errorf("unexpected type %T for field commission", values[i])
+			} else if value != nil {
+				d.Commission = *value
+			}
 		}
 	}
 	return nil
@@ -219,6 +227,8 @@ func (d *Detail) String() string {
 	builder.WriteString(fmt.Sprintf("%v", d.Amount))
 	builder.WriteString(", usd_amount=")
 	builder.WriteString(fmt.Sprintf("%v", d.UsdAmount))
+	builder.WriteString(", commission=")
+	builder.WriteString(fmt.Sprintf("%v", d.Commission))
 	builder.WriteByte(')')
 	return builder.String()
 }
