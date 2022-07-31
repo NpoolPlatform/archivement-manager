@@ -85,6 +85,13 @@ func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) { //n
 			}
 			c.SetUsdAmount(amount)
 		}
+		if in.Commission != nil {
+			amount, err := decimal.NewFromString(in.GetCommission())
+			if err != nil {
+				return err
+			}
+			c.SetCommission(amount)
+		}
 		if in.Units != nil {
 			c.SetUnits(in.GetUnits())
 		}
@@ -166,6 +173,13 @@ func CreateBulk(ctx context.Context, in []*npool.DetailReq) ([]*ent.Detail, erro
 					return err
 				}
 				bulk[i].SetUsdAmount(amount)
+			}
+			if info.Commission != nil {
+				amount, err := decimal.NewFromString(info.GetCommission())
+				if err != nil {
+					return err
+				}
+				bulk[i].SetCommission(amount)
 			}
 			if info.Units != nil {
 				bulk[i].SetUnits(info.GetUnits())
@@ -307,6 +321,38 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.DetailQuery, error
 			stm.Where(detail.AmountGT(amount))
 		case cruder.EQ:
 			stm.Where(detail.AmountEQ(amount))
+		default:
+			return nil, fmt.Errorf("invalid detail field")
+		}
+	}
+	if conds.USDAmount != nil {
+		amount, err := decimal.NewFromString(conds.GetUSDAmount().GetValue())
+		if err != nil {
+			return nil, err
+		}
+		switch conds.GetUSDAmount().GetOp() {
+		case cruder.LT:
+			stm.Where(detail.UsdAmountLT(amount))
+		case cruder.GT:
+			stm.Where(detail.UsdAmountGT(amount))
+		case cruder.EQ:
+			stm.Where(detail.UsdAmountEQ(amount))
+		default:
+			return nil, fmt.Errorf("invalid detail field")
+		}
+	}
+	if conds.Commission != nil {
+		amount, err := decimal.NewFromString(conds.GetCommission().GetValue())
+		if err != nil {
+			return nil, err
+		}
+		switch conds.GetCommission().GetOp() {
+		case cruder.LT:
+			stm.Where(detail.CommissionLT(amount))
+		case cruder.GT:
+			stm.Where(detail.CommissionGT(amount))
+		case cruder.EQ:
+			stm.Where(detail.CommissionEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid detail field")
 		}

@@ -23,6 +23,7 @@ func Ent2Grpc(row *ent.Detail) *npool.Detail {
 		Units:                  row.Units,
 		Amount:                 row.Amount.String(),
 		USDAmount:              row.UsdAmount.String(),
+		Commission:             row.Commission.String(),
 		CreatedAt:              row.CreatedAt,
 	}
 }

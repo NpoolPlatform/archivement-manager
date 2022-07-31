@@ -120,6 +120,18 @@ func validate(info *npool.DetailReq) error { //nolint
 		}
 	}
 
+	if info.Commission != nil {
+		amount, err := decimal.NewFromString(info.GetCommission())
+		if err != nil {
+			logger.Sugar().Errorw("validate", "Commission", info.GetCommission(), "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("Commission is invalid: %v", err))
+		}
+		if amount.Cmp(decimal.NewFromInt(0)) < 0 {
+			logger.Sugar().Errorw("validate", "Commission", info.GetCommission(), "error", "less than 0")
+			return status.Error(codes.InvalidArgument, "Commission is less than 0")
+		}
+	}
+
 	if info.Units == nil || info.GetUnits() == 0 {
 		logger.Sugar().Errorw("validate", "Units", info.Units)
 		return status.Error(codes.InvalidArgument, "Units is 0")
