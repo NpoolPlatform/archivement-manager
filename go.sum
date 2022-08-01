@@ -62,8 +62,6 @@ github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q
 github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
 github.com/NpoolPlatform/api-manager v0.0.0-20220421114434-bf0e069b0c83 h1:eCBDqxMZ80eHjjFVX7M9UwMq8mOqRvkkuvQco4WAHaE=
 github.com/NpoolPlatform/api-manager v0.0.0-20220421114434-bf0e069b0c83/go.mod h1:Z7h/p6Dsv0WaS2Ig3esHVtoIcv1xC9vXVIs2PK6kM8o=
-github.com/NpoolPlatform/cloud-hashing-inspire v0.0.0-20220724104912-5495b0c02d63 h1:7An2Wwkz+eiRWPiHdkdT8f1lMMfQveFJUsTSO76Tai8=
-github.com/NpoolPlatform/cloud-hashing-inspire v0.0.0-20220724104912-5495b0c02d63/go.mod h1:9BYfVsnbQEJrwOYpJgE0ycq/bONhkO1nfJ8YGFCxZT8=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220120091626-4e8035637592/go.mod h1:JqrktA7gNQe/Uprnr6DCs5UCFpheCZ30lDd0OkyRtC4=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220722111225-08c2156ac8bf h1:HX2tl99WkC7Q0x2MxGpfFYeaWk0PX+GdxEoFrWgZAxI=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20220722111225-08c2156ac8bf/go.mod h1:o9I+ipazkngO2E5yC7LOdLTA6nlvf4uTUMOOZ2sRiRU=
