@@ -16,6 +16,7 @@ func Ent2Grpc(row *ent.Detail) *npool.Detail {
 		UserID:                 row.UserID.String(),
 		GoodID:                 row.GoodID.String(),
 		OrderID:                row.OrderID.String(),
+		SelfOrder:              row.SelfOrder,
 		PaymentID:              row.PaymentID.String(),
 		CoinTypeID:             row.CoinTypeID.String(),
 		PaymentCoinTypeID:      row.PaymentCoinTypeID.String(),

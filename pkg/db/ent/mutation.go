@@ -46,6 +46,7 @@ type DetailMutation struct {
 	user_id                      *uuid.UUID
 	good_id                      *uuid.UUID
 	order_id                     *uuid.UUID
+	self_order                   *bool
 	payment_id                   *uuid.UUID
 	coin_type_id                 *uuid.UUID
 	payment_coin_type_id         *uuid.UUID
@@ -531,6 +532,55 @@ func (m *DetailMutation) OrderIDCleared() bool {
 func (m *DetailMutation) ResetOrderID() {
 	m.order_id = nil
 	delete(m.clearedFields, detail.FieldOrderID)
+}
+
+// SetSelfOrder sets the "self_order" field.
+func (m *DetailMutation) SetSelfOrder(b bool) {
+	m.self_order = &b
+}
+
+// SelfOrder returns the value of the "self_order" field in the mutation.
+func (m *DetailMutation) SelfOrder() (r bool, exists bool) {
+	v := m.self_order
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSelfOrder returns the old "self_order" field's value of the Detail entity.
+// If the Detail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DetailMutation) OldSelfOrder(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSelfOrder is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSelfOrder requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSelfOrder: %w", err)
+	}
+	return oldValue.SelfOrder, nil
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (m *DetailMutation) ClearSelfOrder() {
+	m.self_order = nil
+	m.clearedFields[detail.FieldSelfOrder] = struct{}{}
+}
+
+// SelfOrderCleared returns if the "self_order" field was cleared in this mutation.
+func (m *DetailMutation) SelfOrderCleared() bool {
+	_, ok := m.clearedFields[detail.FieldSelfOrder]
+	return ok
+}
+
+// ResetSelfOrder resets all changes to the "self_order" field.
+func (m *DetailMutation) ResetSelfOrder() {
+	m.self_order = nil
+	delete(m.clearedFields, detail.FieldSelfOrder)
 }
 
 // SetPaymentID sets the "payment_id" field.
@@ -1049,7 +1099,7 @@ func (m *DetailMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DetailMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, detail.FieldCreatedAt)
 	}
@@ -1070,6 +1120,9 @@ func (m *DetailMutation) Fields() []string {
 	}
 	if m.order_id != nil {
 		fields = append(fields, detail.FieldOrderID)
+	}
+	if m.self_order != nil {
+		fields = append(fields, detail.FieldSelfOrder)
 	}
 	if m.payment_id != nil {
 		fields = append(fields, detail.FieldPaymentID)
@@ -1117,6 +1170,8 @@ func (m *DetailMutation) Field(name string) (ent.Value, bool) {
 		return m.GoodID()
 	case detail.FieldOrderID:
 		return m.OrderID()
+	case detail.FieldSelfOrder:
+		return m.SelfOrder()
 	case detail.FieldPaymentID:
 		return m.PaymentID()
 	case detail.FieldCoinTypeID:
@@ -1156,6 +1211,8 @@ func (m *DetailMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldGoodID(ctx)
 	case detail.FieldOrderID:
 		return m.OldOrderID(ctx)
+	case detail.FieldSelfOrder:
+		return m.OldSelfOrder(ctx)
 	case detail.FieldPaymentID:
 		return m.OldPaymentID(ctx)
 	case detail.FieldCoinTypeID:
@@ -1229,6 +1286,13 @@ func (m *DetailMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOrderID(v)
+		return nil
+	case detail.FieldSelfOrder:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSelfOrder(v)
 		return nil
 	case detail.FieldPaymentID:
 		v, ok := value.(uuid.UUID)
@@ -1427,6 +1491,9 @@ func (m *DetailMutation) ClearedFields() []string {
 	if m.FieldCleared(detail.FieldOrderID) {
 		fields = append(fields, detail.FieldOrderID)
 	}
+	if m.FieldCleared(detail.FieldSelfOrder) {
+		fields = append(fields, detail.FieldSelfOrder)
+	}
 	if m.FieldCleared(detail.FieldPaymentID) {
 		fields = append(fields, detail.FieldPaymentID)
 	}
@@ -1476,6 +1543,9 @@ func (m *DetailMutation) ClearField(name string) error {
 		return nil
 	case detail.FieldOrderID:
 		m.ClearOrderID()
+		return nil
+	case detail.FieldSelfOrder:
+		m.ClearSelfOrder()
 		return nil
 	case detail.FieldPaymentID:
 		m.ClearPaymentID()
@@ -1529,6 +1599,9 @@ func (m *DetailMutation) ResetField(name string) error {
 		return nil
 	case detail.FieldOrderID:
 		m.ResetOrderID()
+		return nil
+	case detail.FieldSelfOrder:
+		m.ResetSelfOrder()
 		return nil
 	case detail.FieldPaymentID:
 		m.ResetPaymentID()

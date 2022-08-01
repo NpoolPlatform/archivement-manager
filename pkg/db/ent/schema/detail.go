@@ -52,6 +52,10 @@ func (Detail) Fields() []ent.Field {
 				return uuid.UUID{}
 			}),
 		field.
+			Bool("self_order").
+			Optional().
+			Default(false),
+		field.
 			UUID("payment_id", uuid.UUID{}).
 			Optional().
 			Default(func() uuid.UUID {

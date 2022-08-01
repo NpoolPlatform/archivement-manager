@@ -18,6 +18,7 @@ var (
 		{Name: "user_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "good_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "order_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "self_order", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "payment_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "coin_type_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "payment_coin_type_id", Type: field.TypeUUID, Nullable: true},

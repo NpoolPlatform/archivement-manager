@@ -141,6 +141,13 @@ func OrderID(v uuid.UUID) predicate.Detail {
 	})
 }
 
+// SelfOrder applies equality check predicate on the "self_order" field. It's identical to SelfOrderEQ.
+func SelfOrder(v bool) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfOrder), v))
+	})
+}
+
 // PaymentID applies equality check predicate on the "payment_id" field. It's identical to PaymentIDEQ.
 func PaymentID(v uuid.UUID) predicate.Detail {
 	return predicate.Detail(func(s *sql.Selector) {
@@ -782,6 +789,34 @@ func OrderIDIsNil() predicate.Detail {
 func OrderIDNotNil() predicate.Detail {
 	return predicate.Detail(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldOrderID)))
+	})
+}
+
+// SelfOrderEQ applies the EQ predicate on the "self_order" field.
+func SelfOrderEQ(v bool) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSelfOrder), v))
+	})
+}
+
+// SelfOrderNEQ applies the NEQ predicate on the "self_order" field.
+func SelfOrderNEQ(v bool) predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSelfOrder), v))
+	})
+}
+
+// SelfOrderIsNil applies the IsNil predicate on the "self_order" field.
+func SelfOrderIsNil() predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSelfOrder)))
+	})
+}
+
+// SelfOrderNotNil applies the NotNil predicate on the "self_order" field.
+func SelfOrderNotNil() predicate.Detail {
+	return predicate.Detail(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSelfOrder)))
 	})
 }
 

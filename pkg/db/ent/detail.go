@@ -31,6 +31,8 @@ type Detail struct {
 	GoodID uuid.UUID `json:"good_id,omitempty"`
 	// OrderID holds the value of the "order_id" field.
 	OrderID uuid.UUID `json:"order_id,omitempty"`
+	// SelfOrder holds the value of the "self_order" field.
+	SelfOrder bool `json:"self_order,omitempty"`
 	// PaymentID holds the value of the "payment_id" field.
 	PaymentID uuid.UUID `json:"payment_id,omitempty"`
 	// CoinTypeID holds the value of the "coin_type_id" field.
@@ -56,6 +58,8 @@ func (*Detail) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case detail.FieldPaymentCoinUsdCurrency, detail.FieldAmount, detail.FieldUsdAmount, detail.FieldCommission:
 			values[i] = new(decimal.Decimal)
+		case detail.FieldSelfOrder:
+			values[i] = new(sql.NullBool)
 		case detail.FieldCreatedAt, detail.FieldUpdatedAt, detail.FieldDeletedAt, detail.FieldUnits:
 			values[i] = new(sql.NullInt64)
 		case detail.FieldID, detail.FieldAppID, detail.FieldUserID, detail.FieldGoodID, detail.FieldOrderID, detail.FieldPaymentID, detail.FieldCoinTypeID, detail.FieldPaymentCoinTypeID:
@@ -122,6 +126,12 @@ func (d *Detail) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field order_id", values[i])
 			} else if value != nil {
 				d.OrderID = *value
+			}
+		case detail.FieldSelfOrder:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field self_order", values[i])
+			} else if value.Valid {
+				d.SelfOrder = value.Bool
 			}
 		case detail.FieldPaymentID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -213,6 +223,8 @@ func (d *Detail) String() string {
 	builder.WriteString(fmt.Sprintf("%v", d.GoodID))
 	builder.WriteString(", order_id=")
 	builder.WriteString(fmt.Sprintf("%v", d.OrderID))
+	builder.WriteString(", self_order=")
+	builder.WriteString(fmt.Sprintf("%v", d.SelfOrder))
 	builder.WriteString(", payment_id=")
 	builder.WriteString(fmt.Sprintf("%v", d.PaymentID))
 	builder.WriteString(", coin_type_id=")

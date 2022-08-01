@@ -62,20 +62,24 @@ func init() {
 	detailDescOrderID := detailFields[4].Descriptor()
 	// detail.DefaultOrderID holds the default value on creation for the order_id field.
 	detail.DefaultOrderID = detailDescOrderID.Default.(func() uuid.UUID)
+	// detailDescSelfOrder is the schema descriptor for self_order field.
+	detailDescSelfOrder := detailFields[5].Descriptor()
+	// detail.DefaultSelfOrder holds the default value on creation for the self_order field.
+	detail.DefaultSelfOrder = detailDescSelfOrder.Default.(bool)
 	// detailDescPaymentID is the schema descriptor for payment_id field.
-	detailDescPaymentID := detailFields[5].Descriptor()
+	detailDescPaymentID := detailFields[6].Descriptor()
 	// detail.DefaultPaymentID holds the default value on creation for the payment_id field.
 	detail.DefaultPaymentID = detailDescPaymentID.Default.(func() uuid.UUID)
 	// detailDescCoinTypeID is the schema descriptor for coin_type_id field.
-	detailDescCoinTypeID := detailFields[6].Descriptor()
+	detailDescCoinTypeID := detailFields[7].Descriptor()
 	// detail.DefaultCoinTypeID holds the default value on creation for the coin_type_id field.
 	detail.DefaultCoinTypeID = detailDescCoinTypeID.Default.(func() uuid.UUID)
 	// detailDescPaymentCoinTypeID is the schema descriptor for payment_coin_type_id field.
-	detailDescPaymentCoinTypeID := detailFields[7].Descriptor()
+	detailDescPaymentCoinTypeID := detailFields[8].Descriptor()
 	// detail.DefaultPaymentCoinTypeID holds the default value on creation for the payment_coin_type_id field.
 	detail.DefaultPaymentCoinTypeID = detailDescPaymentCoinTypeID.Default.(func() uuid.UUID)
 	// detailDescUnits is the schema descriptor for units field.
-	detailDescUnits := detailFields[9].Descriptor()
+	detailDescUnits := detailFields[10].Descriptor()
 	// detail.DefaultUnits holds the default value on creation for the units field.
 	detail.DefaultUnits = detailDescUnits.Default.(uint32)
 	// detailDescID is the schema descriptor for id field.

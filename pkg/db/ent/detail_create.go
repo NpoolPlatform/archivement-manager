@@ -122,6 +122,20 @@ func (dc *DetailCreate) SetNillableOrderID(u *uuid.UUID) *DetailCreate {
 	return dc
 }
 
+// SetSelfOrder sets the "self_order" field.
+func (dc *DetailCreate) SetSelfOrder(b bool) *DetailCreate {
+	dc.mutation.SetSelfOrder(b)
+	return dc
+}
+
+// SetNillableSelfOrder sets the "self_order" field if the given value is not nil.
+func (dc *DetailCreate) SetNillableSelfOrder(b *bool) *DetailCreate {
+	if b != nil {
+		dc.SetSelfOrder(*b)
+	}
+	return dc
+}
+
 // SetPaymentID sets the "payment_id" field.
 func (dc *DetailCreate) SetPaymentID(u uuid.UUID) *DetailCreate {
 	dc.mutation.SetPaymentID(u)
@@ -370,6 +384,10 @@ func (dc *DetailCreate) defaults() error {
 		v := detail.DefaultOrderID()
 		dc.mutation.SetOrderID(v)
 	}
+	if _, ok := dc.mutation.SelfOrder(); !ok {
+		v := detail.DefaultSelfOrder
+		dc.mutation.SetSelfOrder(v)
+	}
 	if _, ok := dc.mutation.PaymentID(); !ok {
 		if detail.DefaultPaymentID == nil {
 			return fmt.Errorf("ent: uninitialized detail.DefaultPaymentID (forgotten import ent/runtime?)")
@@ -508,6 +526,14 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 			Column: detail.FieldOrderID,
 		})
 		_node.OrderID = value
+	}
+	if value, ok := dc.mutation.SelfOrder(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: detail.FieldSelfOrder,
+		})
+		_node.SelfOrder = value
 	}
 	if value, ok := dc.mutation.PaymentID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -750,6 +776,24 @@ func (u *DetailUpsert) UpdateOrderID() *DetailUpsert {
 // ClearOrderID clears the value of the "order_id" field.
 func (u *DetailUpsert) ClearOrderID() *DetailUpsert {
 	u.SetNull(detail.FieldOrderID)
+	return u
+}
+
+// SetSelfOrder sets the "self_order" field.
+func (u *DetailUpsert) SetSelfOrder(v bool) *DetailUpsert {
+	u.Set(detail.FieldSelfOrder, v)
+	return u
+}
+
+// UpdateSelfOrder sets the "self_order" field to the value that was provided on create.
+func (u *DetailUpsert) UpdateSelfOrder() *DetailUpsert {
+	u.SetExcluded(detail.FieldSelfOrder)
+	return u
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (u *DetailUpsert) ClearSelfOrder() *DetailUpsert {
+	u.SetNull(detail.FieldSelfOrder)
 	return u
 }
 
@@ -1121,6 +1165,27 @@ func (u *DetailUpsertOne) UpdateOrderID() *DetailUpsertOne {
 func (u *DetailUpsertOne) ClearOrderID() *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
 		s.ClearOrderID()
+	})
+}
+
+// SetSelfOrder sets the "self_order" field.
+func (u *DetailUpsertOne) SetSelfOrder(v bool) *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetSelfOrder(v)
+	})
+}
+
+// UpdateSelfOrder sets the "self_order" field to the value that was provided on create.
+func (u *DetailUpsertOne) UpdateSelfOrder() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateSelfOrder()
+	})
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (u *DetailUpsertOne) ClearSelfOrder() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearSelfOrder()
 	})
 }
 
@@ -1687,6 +1752,27 @@ func (u *DetailUpsertBulk) UpdateOrderID() *DetailUpsertBulk {
 func (u *DetailUpsertBulk) ClearOrderID() *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
 		s.ClearOrderID()
+	})
+}
+
+// SetSelfOrder sets the "self_order" field.
+func (u *DetailUpsertBulk) SetSelfOrder(v bool) *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetSelfOrder(v)
+	})
+}
+
+// UpdateSelfOrder sets the "self_order" field to the value that was provided on create.
+func (u *DetailUpsertBulk) UpdateSelfOrder() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateSelfOrder()
+	})
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (u *DetailUpsertBulk) ClearSelfOrder() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearSelfOrder()
 	})
 }
 

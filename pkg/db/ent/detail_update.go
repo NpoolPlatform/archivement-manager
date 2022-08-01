@@ -164,6 +164,26 @@ func (du *DetailUpdate) ClearOrderID() *DetailUpdate {
 	return du
 }
 
+// SetSelfOrder sets the "self_order" field.
+func (du *DetailUpdate) SetSelfOrder(b bool) *DetailUpdate {
+	du.mutation.SetSelfOrder(b)
+	return du
+}
+
+// SetNillableSelfOrder sets the "self_order" field if the given value is not nil.
+func (du *DetailUpdate) SetNillableSelfOrder(b *bool) *DetailUpdate {
+	if b != nil {
+		du.SetSelfOrder(*b)
+	}
+	return du
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (du *DetailUpdate) ClearSelfOrder() *DetailUpdate {
+	du.mutation.ClearSelfOrder()
+	return du
+}
+
 // SetPaymentID sets the "payment_id" field.
 func (du *DetailUpdate) SetPaymentID(u uuid.UUID) *DetailUpdate {
 	du.mutation.SetPaymentID(u)
@@ -545,6 +565,19 @@ func (du *DetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: detail.FieldOrderID,
 		})
 	}
+	if value, ok := du.mutation.SelfOrder(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: detail.FieldSelfOrder,
+		})
+	}
+	if du.mutation.SelfOrderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Column: detail.FieldSelfOrder,
+		})
+	}
 	if value, ok := du.mutation.PaymentID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -835,6 +868,26 @@ func (duo *DetailUpdateOne) SetNillableOrderID(u *uuid.UUID) *DetailUpdateOne {
 // ClearOrderID clears the value of the "order_id" field.
 func (duo *DetailUpdateOne) ClearOrderID() *DetailUpdateOne {
 	duo.mutation.ClearOrderID()
+	return duo
+}
+
+// SetSelfOrder sets the "self_order" field.
+func (duo *DetailUpdateOne) SetSelfOrder(b bool) *DetailUpdateOne {
+	duo.mutation.SetSelfOrder(b)
+	return duo
+}
+
+// SetNillableSelfOrder sets the "self_order" field if the given value is not nil.
+func (duo *DetailUpdateOne) SetNillableSelfOrder(b *bool) *DetailUpdateOne {
+	if b != nil {
+		duo.SetSelfOrder(*b)
+	}
+	return duo
+}
+
+// ClearSelfOrder clears the value of the "self_order" field.
+func (duo *DetailUpdateOne) ClearSelfOrder() *DetailUpdateOne {
+	duo.mutation.ClearSelfOrder()
 	return duo
 }
 
@@ -1241,6 +1294,19 @@ func (duo *DetailUpdateOne) sqlSave(ctx context.Context) (_node *Detail, err err
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
 			Column: detail.FieldOrderID,
+		})
+	}
+	if value, ok := duo.mutation.SelfOrder(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: detail.FieldSelfOrder,
+		})
+	}
+	if duo.mutation.SelfOrderCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Column: detail.FieldSelfOrder,
 		})
 	}
 	if value, ok := duo.mutation.PaymentID(); ok {

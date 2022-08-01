@@ -55,6 +55,9 @@ func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) { //n
 		if in.OrderID != nil {
 			c.SetOrderID(uuid.MustParse(in.GetOrderID()))
 		}
+		if in.SelfOrder != nil {
+			c.SetSelfOrder(in.GetSelfOrder())
+		}
 		if in.PaymentID != nil {
 			c.SetPaymentID(uuid.MustParse(in.GetPaymentID()))
 		}
@@ -143,6 +146,9 @@ func CreateBulk(ctx context.Context, in []*npool.DetailReq) ([]*ent.Detail, erro
 			}
 			if info.OrderID != nil {
 				bulk[i].SetOrderID(uuid.MustParse(info.GetOrderID()))
+			}
+			if info.SelfOrder != nil {
+				bulk[i].SetSelfOrder(info.GetSelfOrder())
 			}
 			if info.PaymentID != nil {
 				bulk[i].SetPaymentID(uuid.MustParse(info.GetPaymentID()))
@@ -265,6 +271,14 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.DetailQuery, error
 		switch conds.GetOrderID().GetOp() {
 		case cruder.EQ:
 			stm.Where(detail.OrderID(uuid.MustParse(conds.GetOrderID().GetValue())))
+		default:
+			return nil, fmt.Errorf("invalid detail field")
+		}
+	}
+	if conds.SelfOrder != nil {
+		switch conds.GetSelfOrder().GetOp() {
+		case cruder.EQ:
+			stm.Where(detail.SelfOrder(conds.GetSelfOrder().GetValue()))
 		default:
 			return nil, fmt.Errorf("invalid detail field")
 		}

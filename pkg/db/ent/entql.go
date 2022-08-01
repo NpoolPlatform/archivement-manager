@@ -33,6 +33,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			detail.FieldUserID:                 {Type: field.TypeUUID, Column: detail.FieldUserID},
 			detail.FieldGoodID:                 {Type: field.TypeUUID, Column: detail.FieldGoodID},
 			detail.FieldOrderID:                {Type: field.TypeUUID, Column: detail.FieldOrderID},
+			detail.FieldSelfOrder:              {Type: field.TypeBool, Column: detail.FieldSelfOrder},
 			detail.FieldPaymentID:              {Type: field.TypeUUID, Column: detail.FieldPaymentID},
 			detail.FieldCoinTypeID:             {Type: field.TypeUUID, Column: detail.FieldCoinTypeID},
 			detail.FieldPaymentCoinTypeID:      {Type: field.TypeUUID, Column: detail.FieldPaymentCoinTypeID},
@@ -150,6 +151,11 @@ func (f *DetailFilter) WhereGoodID(p entql.ValueP) {
 // WhereOrderID applies the entql [16]byte predicate on the order_id field.
 func (f *DetailFilter) WhereOrderID(p entql.ValueP) {
 	f.Where(p.Field(detail.FieldOrderID))
+}
+
+// WhereSelfOrder applies the entql bool predicate on the self_order field.
+func (f *DetailFilter) WhereSelfOrder(p entql.BoolP) {
+	f.Where(p.Field(detail.FieldSelfOrder))
 }
 
 // WherePaymentID applies the entql [16]byte predicate on the payment_id field.
