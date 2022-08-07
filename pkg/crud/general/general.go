@@ -202,9 +202,6 @@ func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) 
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
 		info, err = tx.General.Query().Where(general.ID(uuid.MustParse(in.GetID()))).ForUpdate().Only(_ctx)
 		if err != nil {
-			if ent.IsNotFound(err) {
-				return nil
-			}
 			return fmt.Errorf("fail query general: %v", err)
 		}
 
@@ -245,9 +242,6 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.General, error) {
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
 		info, err = cli.General.Query().Where(general.ID(id)).Only(_ctx)
-		if ent.IsNotFound(err) {
-			return nil
-		}
 		return err
 	})
 	if err != nil {
@@ -472,6 +466,9 @@ func RowOnly(ctx context.Context, conds *npool.Conds) (*ent.General, error) {
 
 		info, err = stm.Only(_ctx)
 		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil
+			}
 			return err
 		}
 
