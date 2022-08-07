@@ -153,6 +153,9 @@ func duplicate(infos []*npool.DetailReq) error {
 		if _, ok := keys[key]; ok {
 			return status.Error(codes.InvalidArgument, "Infos has duplicate AppID:UserID:CoinTypeID")
 		}
+
+		keys[key] = struct{}{}
+		apps[info.GetAppID()] = struct{}{}
 	}
 
 	if len(apps) > 1 {
@@ -160,4 +163,8 @@ func duplicate(infos []*npool.DetailReq) error {
 	}
 
 	return nil
+}
+
+func Validate(info *npool.DetailReq) error {
+	return validate(info)
 }
