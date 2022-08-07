@@ -221,9 +221,6 @@ func Row(ctx context.Context, id uuid.UUID) (*ent.Detail, error) {
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
 		info, err = cli.Detail.Query().Where(detail.ID(id)).Only(_ctx)
-		if ent.IsNotFound(err) {
-			return nil
-		}
 		return err
 	})
 	if err != nil {
