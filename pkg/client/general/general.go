@@ -42,7 +42,7 @@ func CreateGeneral(ctx context.Context, in *npool.GeneralReq) (*npool.General, e
 		if err != nil {
 			return nil, fmt.Errorf("fail create general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail create general: %v", err)
@@ -58,7 +58,7 @@ func CreateGenerals(ctx context.Context, in []*npool.GeneralReq) ([]*npool.Gener
 		if err != nil {
 			return nil, fmt.Errorf("fail create generals: %v", err)
 		}
-		return resp.GetInfos(), nil
+		return resp.Infos, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail create generals: %v", err)
@@ -74,7 +74,7 @@ func AddGeneral(ctx context.Context, in *npool.GeneralReq) (*npool.General, erro
 		if err != nil {
 			return nil, fmt.Errorf("fail add general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail update general: %v", err)
@@ -90,7 +90,7 @@ func GetGeneral(ctx context.Context, id string) (*npool.General, error) {
 		if err != nil {
 			return nil, fmt.Errorf("fail get general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail get general: %v", err)
@@ -106,7 +106,7 @@ func GetGeneralOnly(ctx context.Context, conds *npool.Conds) (*npool.General, er
 		if err != nil {
 			return nil, fmt.Errorf("fail get general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail get general: %v", err)
@@ -126,7 +126,7 @@ func GetGenerals(ctx context.Context, conds *npool.Conds, limit, offset int32) (
 			return nil, fmt.Errorf("fail get generals: %v", err)
 		}
 		total = resp.GetTotal()
-		return resp.GetInfos(), nil
+		return resp.Infos, nil
 	})
 	if err != nil {
 		return nil, 0, fmt.Errorf("fail get generals: %v", err)
@@ -142,7 +142,7 @@ func ExistGeneral(ctx context.Context, id string) (bool, error) {
 		if err != nil {
 			return nil, fmt.Errorf("fail get general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return false, fmt.Errorf("fail get general: %v", err)
@@ -158,7 +158,7 @@ func ExistGeneralConds(ctx context.Context, conds *npool.Conds) (bool, error) {
 		if err != nil {
 			return nil, fmt.Errorf("fail get general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return false, fmt.Errorf("fail get general: %v", err)
@@ -174,7 +174,7 @@ func CountGenerals(ctx context.Context, conds *npool.Conds) (uint32, error) {
 		if err != nil {
 			return nil, fmt.Errorf("fail count general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return 0, fmt.Errorf("fail count general: %v", err)
@@ -190,7 +190,7 @@ func DeleteGeneral(ctx context.Context, id string) (*npool.General, error) {
 		if err != nil {
 			return nil, fmt.Errorf("fail delete general: %v", err)
 		}
-		return resp.GetInfo(), nil
+		return resp.Info, nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("fail delete general: %v", err)
