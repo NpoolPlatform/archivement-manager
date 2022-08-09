@@ -21,7 +21,73 @@ import (
 	"github.com/google/uuid"
 )
 
-func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) { //nolint
+func CreateSet(c *ent.DetailCreate, in *npool.DetailReq) (*ent.DetailCreate, error) { //nolint
+	if in.ID != nil {
+		c.SetID(uuid.MustParse(in.GetID()))
+	}
+	if in.AppID != nil {
+		c.SetAppID(uuid.MustParse(in.GetAppID()))
+	}
+	if in.UserID != nil {
+		c.SetUserID(uuid.MustParse(in.GetUserID()))
+	}
+	if in.GoodID != nil {
+		c.SetGoodID(uuid.MustParse(in.GetGoodID()))
+	}
+	if in.OrderID != nil {
+		c.SetOrderID(uuid.MustParse(in.GetOrderID()))
+	}
+	if in.SelfOrder != nil {
+		c.SetSelfOrder(in.GetSelfOrder())
+	}
+	if in.PaymentID != nil {
+		c.SetPaymentID(uuid.MustParse(in.GetPaymentID()))
+	}
+	if in.CoinTypeID != nil {
+		c.SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID()))
+	}
+	if in.PaymentCoinTypeID != nil {
+		c.SetPaymentCoinTypeID(uuid.MustParse(in.GetPaymentCoinTypeID()))
+	}
+	if in.PaymentCoinUSDCurrency != nil {
+		currency, err := decimal.NewFromString(in.GetPaymentCoinUSDCurrency())
+		if err != nil {
+			return nil, err
+		}
+		c.SetPaymentCoinUsdCurrency(currency)
+	}
+	if in.Amount != nil {
+		amount, err := decimal.NewFromString(in.GetAmount())
+		if err != nil {
+			return nil, err
+		}
+		c.SetAmount(amount)
+	}
+	if in.USDAmount != nil {
+		amount, err := decimal.NewFromString(in.GetUSDAmount())
+		if err != nil {
+			return nil, err
+		}
+		c.SetUsdAmount(amount)
+	}
+	if in.Commission != nil {
+		amount, err := decimal.NewFromString(in.GetCommission())
+		if err != nil {
+			return nil, err
+		}
+		c.SetCommission(amount)
+	}
+	if in.Units != nil {
+		c.SetUnits(in.GetUnits())
+	}
+	if in.CreatedAt != nil {
+		c.SetCreatedAt(in.GetCreatedAt())
+	}
+
+	return c, nil
+}
+
+func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) {
 	var info *ent.Detail
 	var err error
 
@@ -38,68 +104,9 @@ func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) { //n
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := cli.Debug().Detail.Create()
-
-		if in.ID != nil {
-			c.SetID(uuid.MustParse(in.GetID()))
-		}
-		if in.AppID != nil {
-			c.SetAppID(uuid.MustParse(in.GetAppID()))
-		}
-		if in.UserID != nil {
-			c.SetUserID(uuid.MustParse(in.GetUserID()))
-		}
-		if in.GoodID != nil {
-			c.SetGoodID(uuid.MustParse(in.GetGoodID()))
-		}
-		if in.OrderID != nil {
-			c.SetOrderID(uuid.MustParse(in.GetOrderID()))
-		}
-		if in.SelfOrder != nil {
-			c.SetSelfOrder(in.GetSelfOrder())
-		}
-		if in.PaymentID != nil {
-			c.SetPaymentID(uuid.MustParse(in.GetPaymentID()))
-		}
-		if in.CoinTypeID != nil {
-			c.SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID()))
-		}
-		if in.PaymentCoinTypeID != nil {
-			c.SetPaymentCoinTypeID(uuid.MustParse(in.GetPaymentCoinTypeID()))
-		}
-		if in.PaymentCoinUSDCurrency != nil {
-			currency, err := decimal.NewFromString(in.GetPaymentCoinUSDCurrency())
-			if err != nil {
-				return err
-			}
-			c.SetPaymentCoinUsdCurrency(currency)
-		}
-		if in.Amount != nil {
-			amount, err := decimal.NewFromString(in.GetAmount())
-			if err != nil {
-				return err
-			}
-			c.SetAmount(amount)
-		}
-		if in.USDAmount != nil {
-			amount, err := decimal.NewFromString(in.GetUSDAmount())
-			if err != nil {
-				return err
-			}
-			c.SetUsdAmount(amount)
-		}
-		if in.Commission != nil {
-			amount, err := decimal.NewFromString(in.GetCommission())
-			if err != nil {
-				return err
-			}
-			c.SetCommission(amount)
-		}
-		if in.Units != nil {
-			c.SetUnits(in.GetUnits())
-		}
-		if in.CreatedAt != nil {
-			c.SetCreatedAt(in.GetCreatedAt())
+		c, err := CreateSet(cli.Debug().Detail.Create(), in)
+		if err != nil {
+			return err
 		}
 
 		info, err = c.Save(_ctx)
@@ -112,7 +119,7 @@ func Create(ctx context.Context, in *npool.DetailReq) (*ent.Detail, error) { //n
 	return info, nil
 }
 
-func CreateBulk(ctx context.Context, in []*npool.DetailReq) ([]*ent.Detail, error) { //nolint
+func CreateBulk(ctx context.Context, in []*npool.DetailReq) ([]*ent.Detail, error) {
 	var err error
 
 	_, span := otel.Tracer(constant.ServiceName).Start(ctx, "CreateBulk")
@@ -131,67 +138,9 @@ func CreateBulk(ctx context.Context, in []*npool.DetailReq) ([]*ent.Detail, erro
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
 		bulk := make([]*ent.DetailCreate, len(in))
 		for i, info := range in {
-			bulk[i] = tx.Detail.Create()
-			if info.ID != nil {
-				bulk[i].SetID(uuid.MustParse(info.GetID()))
-			}
-			if info.AppID != nil {
-				bulk[i].SetAppID(uuid.MustParse(info.GetAppID()))
-			}
-			if info.UserID != nil {
-				bulk[i].SetUserID(uuid.MustParse(info.GetUserID()))
-			}
-			if info.GoodID != nil {
-				bulk[i].SetGoodID(uuid.MustParse(info.GetGoodID()))
-			}
-			if info.OrderID != nil {
-				bulk[i].SetOrderID(uuid.MustParse(info.GetOrderID()))
-			}
-			if info.SelfOrder != nil {
-				bulk[i].SetSelfOrder(info.GetSelfOrder())
-			}
-			if info.PaymentID != nil {
-				bulk[i].SetPaymentID(uuid.MustParse(info.GetPaymentID()))
-			}
-			if info.CoinTypeID != nil {
-				bulk[i].SetCoinTypeID(uuid.MustParse(info.GetCoinTypeID()))
-			}
-			if info.PaymentCoinTypeID != nil {
-				bulk[i].SetPaymentCoinTypeID(uuid.MustParse(info.GetPaymentCoinTypeID()))
-			}
-			if info.PaymentCoinUSDCurrency != nil {
-				currency, err := decimal.NewFromString(info.GetPaymentCoinUSDCurrency())
-				if err != nil {
-					return err
-				}
-				bulk[i].SetPaymentCoinUsdCurrency(currency)
-			}
-			if info.Amount != nil {
-				amount, err := decimal.NewFromString(info.GetAmount())
-				if err != nil {
-					return err
-				}
-				bulk[i].SetAmount(amount)
-			}
-			if info.USDAmount != nil {
-				amount, err := decimal.NewFromString(info.GetUSDAmount())
-				if err != nil {
-					return err
-				}
-				bulk[i].SetUsdAmount(amount)
-			}
-			if info.Commission != nil {
-				amount, err := decimal.NewFromString(info.GetCommission())
-				if err != nil {
-					return err
-				}
-				bulk[i].SetCommission(amount)
-			}
-			if info.Units != nil {
-				bulk[i].SetUnits(info.GetUnits())
-			}
-			if info.CreatedAt != nil {
-				bulk[i].SetCreatedAt(info.GetCreatedAt())
+			bulk[i], err = CreateSet(tx.Detail.Create(), info)
+			if err != nil {
+				return err
 			}
 		}
 		rows, err = tx.Detail.CreateBulk(bulk...).Save(_ctx)

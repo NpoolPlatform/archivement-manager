@@ -21,6 +21,33 @@ import (
 	"github.com/google/uuid"
 )
 
+func CreateSet(c *ent.GeneralCreate, in *npool.GeneralReq) *ent.GeneralCreate {
+	if in.ID != nil {
+		c.SetID(uuid.MustParse(in.GetID()))
+	}
+	if in.AppID != nil {
+		c.SetAppID(uuid.MustParse(in.GetAppID()))
+	}
+	if in.UserID != nil {
+		c.SetUserID(uuid.MustParse(in.GetUserID()))
+	}
+	if in.GoodID != nil {
+		c.SetGoodID(uuid.MustParse(in.GetGoodID()))
+	}
+	if in.CoinTypeID != nil {
+		c.SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID()))
+	}
+
+	c.SetTotalAmount(decimal.NewFromInt(0))
+	c.SetSelfAmount(decimal.NewFromInt(0))
+	c.SetTotalUnits(0)
+	c.SetSelfUnits(0)
+	c.SetTotalCommission(decimal.NewFromInt(0))
+	c.SetSelfCommission(decimal.NewFromInt(0))
+
+	return c
+}
+
 func Create(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) {
 	var info *ent.General
 	var err error
@@ -38,31 +65,7 @@ func Create(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) {
 	span = tracer.Trace(span, in)
 
 	err = db.WithClient(ctx, func(_ctx context.Context, cli *ent.Client) error {
-		c := cli.General.Create()
-
-		if in.ID != nil {
-			c.SetID(uuid.MustParse(in.GetID()))
-		}
-		if in.AppID != nil {
-			c.SetAppID(uuid.MustParse(in.GetAppID()))
-		}
-		if in.UserID != nil {
-			c.SetUserID(uuid.MustParse(in.GetUserID()))
-		}
-		if in.GoodID != nil {
-			c.SetGoodID(uuid.MustParse(in.GetGoodID()))
-		}
-		if in.CoinTypeID != nil {
-			c.SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID()))
-		}
-
-		c.SetTotalAmount(decimal.NewFromInt(0))
-		c.SetSelfAmount(decimal.NewFromInt(0))
-		c.SetTotalUnits(0)
-		c.SetSelfUnits(0)
-		c.SetTotalCommission(decimal.NewFromInt(0))
-		c.SetSelfCommission(decimal.NewFromInt(0))
-
+		c := CreateSet(cli.General.Create(), in)
 		info, err = c.Save(_ctx)
 		return err
 	})
@@ -92,28 +95,7 @@ func CreateBulk(ctx context.Context, in []*npool.GeneralReq) ([]*ent.General, er
 	err = db.WithTx(ctx, func(_ctx context.Context, tx *ent.Tx) error {
 		bulk := make([]*ent.GeneralCreate, len(in))
 		for i, info := range in {
-			bulk[i] = tx.General.Create()
-			if info.ID != nil {
-				bulk[i].SetID(uuid.MustParse(info.GetID()))
-			}
-			if info.AppID != nil {
-				bulk[i].SetAppID(uuid.MustParse(info.GetAppID()))
-			}
-			if info.UserID != nil {
-				bulk[i].SetUserID(uuid.MustParse(info.GetUserID()))
-			}
-			if info.GoodID != nil {
-				bulk[i].SetGoodID(uuid.MustParse(info.GetGoodID()))
-			}
-			if info.CoinTypeID != nil {
-				bulk[i].SetCoinTypeID(uuid.MustParse(info.GetCoinTypeID()))
-			}
-			bulk[i].SetTotalAmount(decimal.NewFromInt(0))
-			bulk[i].SetSelfAmount(decimal.NewFromInt(0))
-			bulk[i].SetTotalUnits(0)
-			bulk[i].SetSelfUnits(0)
-			bulk[i].SetTotalCommission(decimal.NewFromInt(0))
-			bulk[i].SetSelfCommission(decimal.NewFromInt(0))
+			bulk[i] = CreateSet(tx.General.Create(), info)
 		}
 		rows, err = tx.General.CreateBulk(bulk...).Save(_ctx)
 		return err
@@ -124,7 +106,84 @@ func CreateBulk(ctx context.Context, in []*npool.GeneralReq) ([]*ent.General, er
 	return rows, nil
 }
 
-func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) { //nolint
+func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne, err error) { //nolint
+	totalAmount := decimal.NewFromInt(0)
+	if in.TotalAmount != nil {
+		totalAmount, err = decimal.NewFromString(in.GetTotalAmount())
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if totalAmount.Cmp(decimal.NewFromInt(0)) < 0 {
+		return nil, fmt.Errorf("TotalAmount < 0")
+	}
+
+	selfAmount := decimal.NewFromInt(0)
+	if in.SelfAmount != nil {
+		selfAmount, err = decimal.NewFromString(in.GetSelfAmount())
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if selfAmount.Cmp(decimal.NewFromInt(0)) < 0 {
+		return nil, fmt.Errorf("SelfAmount < 0")
+	}
+
+	totalCommission := decimal.NewFromInt(0)
+	if in.TotalCommission != nil {
+		totalCommission, err = decimal.NewFromString(in.GetTotalCommission())
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if totalCommission.Cmp(decimal.NewFromInt(0)) < 0 {
+		return nil, fmt.Errorf("TotalCommission < 0")
+	}
+
+	selfCommission := decimal.NewFromInt(0)
+	if in.SelfCommission != nil {
+		selfCommission, err = decimal.NewFromString(in.GetSelfCommission())
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if selfCommission.Cmp(decimal.NewFromInt(0)) < 0 {
+		return nil, fmt.Errorf("SelfCommission < 0")
+	}
+
+	stm := info.Update()
+
+	if in.TotalAmount != nil {
+		totalAmount = totalAmount.Add(info.TotalAmount)
+		stm = stm.SetTotalAmount(totalAmount)
+	}
+	if in.SelfAmount != nil {
+		selfAmount = selfAmount.Add(info.SelfAmount)
+		stm = stm.SetSelfAmount(selfAmount)
+	}
+	if in.TotalUnits != nil {
+		stm = stm.AddTotalUnits(int32(in.GetTotalUnits()))
+	}
+	if in.SelfUnits != nil {
+		stm = stm.AddSelfUnits(int32(in.GetSelfUnits()))
+	}
+	if in.TotalCommission != nil {
+		totalCommission = totalCommission.Add(info.TotalCommission)
+		stm = stm.SetTotalCommission(totalCommission)
+	}
+	if in.SelfCommission != nil {
+		selfCommission = selfCommission.Add(info.SelfCommission)
+		stm = stm.SetSelfCommission(selfCommission)
+	}
+
+	return stm, nil
+}
+
+func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) {
 	var info *ent.General
 	var err error
 
@@ -146,73 +205,9 @@ func AddFields(ctx context.Context, in *npool.GeneralReq) (*ent.General, error) 
 			return fmt.Errorf("fail query general: %v", err)
 		}
 
-		totalAmount := decimal.NewFromInt(0)
-		if in.TotalAmount != nil {
-			totalAmount, err = decimal.NewFromString(in.GetTotalAmount())
-			if err != nil {
-				return err
-			}
-		}
-
-		if totalAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-			return fmt.Errorf("TotalAmount < 0")
-		}
-
-		selfAmount := decimal.NewFromInt(0)
-		if in.SelfAmount != nil {
-			selfAmount, err = decimal.NewFromString(in.GetSelfAmount())
-			if err != nil {
-				return err
-			}
-		}
-
-		if selfAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-			return fmt.Errorf("SelfAmount < 0")
-		}
-
-		totalCommission := decimal.NewFromInt(0)
-		if in.TotalCommission != nil {
-			totalCommission, err = decimal.NewFromString(in.GetTotalCommission())
-			if err != nil {
-				return err
-			}
-		}
-
-		if totalCommission.Cmp(decimal.NewFromInt(0)) < 0 {
-			return fmt.Errorf("TotalCommission < 0")
-		}
-
-		selfCommission := decimal.NewFromInt(0)
-		if in.SelfCommission != nil {
-			selfCommission, err = decimal.NewFromString(in.GetSelfCommission())
-			if err != nil {
-				return err
-			}
-		}
-
-		if selfCommission.Cmp(decimal.NewFromInt(0)) < 0 {
-			return fmt.Errorf("SelfCommission < 0")
-		}
-
-		stm := info.Update()
-
-		if in.TotalAmount != nil {
-			stm = stm.AddTotalAmount(totalAmount)
-		}
-		if in.SelfAmount != nil {
-			stm = stm.AddSelfAmount(selfAmount)
-		}
-		if in.TotalUnits != nil {
-			stm = stm.AddTotalUnits(int32(in.GetTotalUnits()))
-		}
-		if in.SelfUnits != nil {
-			stm = stm.AddSelfUnits(int32(in.GetSelfUnits()))
-		}
-		if in.TotalCommission != nil {
-			stm = stm.AddTotalCommission(totalCommission)
-		}
-		if in.SelfCommission != nil {
-			stm = stm.AddSelfCommission(selfCommission)
+		stm, err := UpdateSet(info, in)
+		if err != nil {
+			return err
 		}
 
 		info, err = stm.Save(_ctx)
