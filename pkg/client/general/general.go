@@ -114,7 +114,7 @@ func GetGeneralOnly(ctx context.Context, conds *npool.Conds) (*npool.General, er
 	return info.(*npool.General), nil
 }
 
-func GetGenerals(ctx context.Context, conds *npool.Conds, limit, offset int32) ([]*npool.General, uint32, error) {
+func GetGenerals(ctx context.Context, conds *npool.Conds, offset, limit int32) ([]*npool.General, uint32, error) {
 	var total uint32
 	infos, err := withCRUD(ctx, func(_ctx context.Context, cli npool.GeneralMgrClient) (cruder.Any, error) {
 		resp, err := cli.GetGenerals(ctx, &npool.GetGeneralsRequest{
