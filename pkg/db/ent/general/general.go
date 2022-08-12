@@ -5,6 +5,7 @@ package general
 import (
 	"entgo.io/ent"
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -38,6 +39,8 @@ const (
 	FieldTotalCommission = "total_commission"
 	// FieldSelfCommission holds the string denoting the self_commission field in the database.
 	FieldSelfCommission = "self_commission"
+	// FieldSuperiorCommission holds the string denoting the superior_commission field in the database.
+	FieldSuperiorCommission = "superior_commission"
 	// Table holds the table name of the general in the database.
 	Table = "generals"
 )
@@ -58,6 +61,7 @@ var Columns = []string{
 	FieldSelfAmount,
 	FieldTotalCommission,
 	FieldSelfCommission,
+	FieldSuperiorCommission,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -99,6 +103,16 @@ var (
 	DefaultTotalUnits uint32
 	// DefaultSelfUnits holds the default value on creation for the "self_units" field.
 	DefaultSelfUnits uint32
+	// DefaultTotalAmount holds the default value on creation for the "total_amount" field.
+	DefaultTotalAmount decimal.Decimal
+	// DefaultSelfAmount holds the default value on creation for the "self_amount" field.
+	DefaultSelfAmount decimal.Decimal
+	// DefaultTotalCommission holds the default value on creation for the "total_commission" field.
+	DefaultTotalCommission decimal.Decimal
+	// DefaultSelfCommission holds the default value on creation for the "self_commission" field.
+	DefaultSelfCommission decimal.Decimal
+	// DefaultSuperiorCommission holds the default value on creation for the "superior_commission" field.
+	DefaultSuperiorCommission decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

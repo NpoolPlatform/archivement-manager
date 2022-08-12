@@ -5,6 +5,7 @@ package detail
 import (
 	"entgo.io/ent"
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -22,6 +23,8 @@ const (
 	FieldAppID = "app_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
+	// FieldDirectContributorID holds the string denoting the direct_contributor_id field in the database.
+	FieldDirectContributorID = "direct_contributor_id"
 	// FieldGoodID holds the string denoting the good_id field in the database.
 	FieldGoodID = "good_id"
 	// FieldOrderID holds the string denoting the order_id field in the database.
@@ -56,6 +59,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldAppID,
 	FieldUserID,
+	FieldDirectContributorID,
 	FieldGoodID,
 	FieldOrderID,
 	FieldSelfOrder,
@@ -100,6 +104,8 @@ var (
 	DefaultAppID func() uuid.UUID
 	// DefaultUserID holds the default value on creation for the "user_id" field.
 	DefaultUserID func() uuid.UUID
+	// DefaultDirectContributorID holds the default value on creation for the "direct_contributor_id" field.
+	DefaultDirectContributorID func() uuid.UUID
 	// DefaultGoodID holds the default value on creation for the "good_id" field.
 	DefaultGoodID func() uuid.UUID
 	// DefaultOrderID holds the default value on creation for the "order_id" field.
@@ -112,8 +118,16 @@ var (
 	DefaultCoinTypeID func() uuid.UUID
 	// DefaultPaymentCoinTypeID holds the default value on creation for the "payment_coin_type_id" field.
 	DefaultPaymentCoinTypeID func() uuid.UUID
+	// DefaultPaymentCoinUsdCurrency holds the default value on creation for the "payment_coin_usd_currency" field.
+	DefaultPaymentCoinUsdCurrency decimal.Decimal
 	// DefaultUnits holds the default value on creation for the "units" field.
 	DefaultUnits uint32
+	// DefaultAmount holds the default value on creation for the "amount" field.
+	DefaultAmount decimal.Decimal
+	// DefaultUsdAmount holds the default value on creation for the "usd_amount" field.
+	DefaultUsdAmount decimal.Decimal
+	// DefaultCommission holds the default value on creation for the "commission" field.
+	DefaultCommission decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

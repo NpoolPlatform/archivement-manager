@@ -94,6 +94,20 @@ func (dc *DetailCreate) SetNillableUserID(u *uuid.UUID) *DetailCreate {
 	return dc
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (dc *DetailCreate) SetDirectContributorID(u uuid.UUID) *DetailCreate {
+	dc.mutation.SetDirectContributorID(u)
+	return dc
+}
+
+// SetNillableDirectContributorID sets the "direct_contributor_id" field if the given value is not nil.
+func (dc *DetailCreate) SetNillableDirectContributorID(u *uuid.UUID) *DetailCreate {
+	if u != nil {
+		dc.SetDirectContributorID(*u)
+	}
+	return dc
+}
+
 // SetGoodID sets the "good_id" field.
 func (dc *DetailCreate) SetGoodID(u uuid.UUID) *DetailCreate {
 	dc.mutation.SetGoodID(u)
@@ -370,6 +384,13 @@ func (dc *DetailCreate) defaults() error {
 		v := detail.DefaultUserID()
 		dc.mutation.SetUserID(v)
 	}
+	if _, ok := dc.mutation.DirectContributorID(); !ok {
+		if detail.DefaultDirectContributorID == nil {
+			return fmt.Errorf("ent: uninitialized detail.DefaultDirectContributorID (forgotten import ent/runtime?)")
+		}
+		v := detail.DefaultDirectContributorID()
+		dc.mutation.SetDirectContributorID(v)
+	}
 	if _, ok := dc.mutation.GoodID(); !ok {
 		if detail.DefaultGoodID == nil {
 			return fmt.Errorf("ent: uninitialized detail.DefaultGoodID (forgotten import ent/runtime?)")
@@ -409,9 +430,25 @@ func (dc *DetailCreate) defaults() error {
 		v := detail.DefaultPaymentCoinTypeID()
 		dc.mutation.SetPaymentCoinTypeID(v)
 	}
+	if _, ok := dc.mutation.PaymentCoinUsdCurrency(); !ok {
+		v := detail.DefaultPaymentCoinUsdCurrency
+		dc.mutation.SetPaymentCoinUsdCurrency(v)
+	}
 	if _, ok := dc.mutation.Units(); !ok {
 		v := detail.DefaultUnits
 		dc.mutation.SetUnits(v)
+	}
+	if _, ok := dc.mutation.Amount(); !ok {
+		v := detail.DefaultAmount
+		dc.mutation.SetAmount(v)
+	}
+	if _, ok := dc.mutation.UsdAmount(); !ok {
+		v := detail.DefaultUsdAmount
+		dc.mutation.SetUsdAmount(v)
+	}
+	if _, ok := dc.mutation.Commission(); !ok {
+		v := detail.DefaultCommission
+		dc.mutation.SetCommission(v)
 	}
 	if _, ok := dc.mutation.ID(); !ok {
 		if detail.DefaultID == nil {
@@ -511,6 +548,14 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 		})
 		_node.UserID = value
 	}
+	if value, ok := dc.mutation.DirectContributorID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: detail.FieldDirectContributorID,
+		})
+		_node.DirectContributorID = value
+	}
 	if value, ok := dc.mutation.GoodID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -561,7 +606,7 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := dc.mutation.PaymentCoinUsdCurrency(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldPaymentCoinUsdCurrency,
 		})
@@ -577,7 +622,7 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := dc.mutation.Amount(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldAmount,
 		})
@@ -585,7 +630,7 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := dc.mutation.UsdAmount(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldUsdAmount,
 		})
@@ -593,7 +638,7 @@ func (dc *DetailCreate) createSpec() (*Detail, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := dc.mutation.Commission(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldCommission,
 		})
@@ -743,6 +788,24 @@ func (u *DetailUpsert) ClearUserID() *DetailUpsert {
 	return u
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (u *DetailUpsert) SetDirectContributorID(v uuid.UUID) *DetailUpsert {
+	u.Set(detail.FieldDirectContributorID, v)
+	return u
+}
+
+// UpdateDirectContributorID sets the "direct_contributor_id" field to the value that was provided on create.
+func (u *DetailUpsert) UpdateDirectContributorID() *DetailUpsert {
+	u.SetExcluded(detail.FieldDirectContributorID)
+	return u
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (u *DetailUpsert) ClearDirectContributorID() *DetailUpsert {
+	u.SetNull(detail.FieldDirectContributorID)
+	return u
+}
+
 // SetGoodID sets the "good_id" field.
 func (u *DetailUpsert) SetGoodID(v uuid.UUID) *DetailUpsert {
 	u.Set(detail.FieldGoodID, v)
@@ -863,12 +926,6 @@ func (u *DetailUpsert) UpdatePaymentCoinUsdCurrency() *DetailUpsert {
 	return u
 }
 
-// AddPaymentCoinUsdCurrency adds v to the "payment_coin_usd_currency" field.
-func (u *DetailUpsert) AddPaymentCoinUsdCurrency(v decimal.Decimal) *DetailUpsert {
-	u.Add(detail.FieldPaymentCoinUsdCurrency, v)
-	return u
-}
-
 // ClearPaymentCoinUsdCurrency clears the value of the "payment_coin_usd_currency" field.
 func (u *DetailUpsert) ClearPaymentCoinUsdCurrency() *DetailUpsert {
 	u.SetNull(detail.FieldPaymentCoinUsdCurrency)
@@ -911,12 +968,6 @@ func (u *DetailUpsert) UpdateAmount() *DetailUpsert {
 	return u
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *DetailUpsert) AddAmount(v decimal.Decimal) *DetailUpsert {
-	u.Add(detail.FieldAmount, v)
-	return u
-}
-
 // ClearAmount clears the value of the "amount" field.
 func (u *DetailUpsert) ClearAmount() *DetailUpsert {
 	u.SetNull(detail.FieldAmount)
@@ -935,12 +986,6 @@ func (u *DetailUpsert) UpdateUsdAmount() *DetailUpsert {
 	return u
 }
 
-// AddUsdAmount adds v to the "usd_amount" field.
-func (u *DetailUpsert) AddUsdAmount(v decimal.Decimal) *DetailUpsert {
-	u.Add(detail.FieldUsdAmount, v)
-	return u
-}
-
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (u *DetailUpsert) ClearUsdAmount() *DetailUpsert {
 	u.SetNull(detail.FieldUsdAmount)
@@ -956,12 +1001,6 @@ func (u *DetailUpsert) SetCommission(v decimal.Decimal) *DetailUpsert {
 // UpdateCommission sets the "commission" field to the value that was provided on create.
 func (u *DetailUpsert) UpdateCommission() *DetailUpsert {
 	u.SetExcluded(detail.FieldCommission)
-	return u
-}
-
-// AddCommission adds v to the "commission" field.
-func (u *DetailUpsert) AddCommission(v decimal.Decimal) *DetailUpsert {
-	u.Add(detail.FieldCommission, v)
 	return u
 }
 
@@ -1126,6 +1165,27 @@ func (u *DetailUpsertOne) ClearUserID() *DetailUpsertOne {
 	})
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (u *DetailUpsertOne) SetDirectContributorID(v uuid.UUID) *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetDirectContributorID(v)
+	})
+}
+
+// UpdateDirectContributorID sets the "direct_contributor_id" field to the value that was provided on create.
+func (u *DetailUpsertOne) UpdateDirectContributorID() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateDirectContributorID()
+	})
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (u *DetailUpsertOne) ClearDirectContributorID() *DetailUpsertOne {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearDirectContributorID()
+	})
+}
+
 // SetGoodID sets the "good_id" field.
 func (u *DetailUpsertOne) SetGoodID(v uuid.UUID) *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
@@ -1259,13 +1319,6 @@ func (u *DetailUpsertOne) SetPaymentCoinUsdCurrency(v decimal.Decimal) *DetailUp
 	})
 }
 
-// AddPaymentCoinUsdCurrency adds v to the "payment_coin_usd_currency" field.
-func (u *DetailUpsertOne) AddPaymentCoinUsdCurrency(v decimal.Decimal) *DetailUpsertOne {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddPaymentCoinUsdCurrency(v)
-	})
-}
-
 // UpdatePaymentCoinUsdCurrency sets the "payment_coin_usd_currency" field to the value that was provided on create.
 func (u *DetailUpsertOne) UpdatePaymentCoinUsdCurrency() *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
@@ -1315,13 +1368,6 @@ func (u *DetailUpsertOne) SetAmount(v decimal.Decimal) *DetailUpsertOne {
 	})
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *DetailUpsertOne) AddAmount(v decimal.Decimal) *DetailUpsertOne {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddAmount(v)
-	})
-}
-
 // UpdateAmount sets the "amount" field to the value that was provided on create.
 func (u *DetailUpsertOne) UpdateAmount() *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
@@ -1343,13 +1389,6 @@ func (u *DetailUpsertOne) SetUsdAmount(v decimal.Decimal) *DetailUpsertOne {
 	})
 }
 
-// AddUsdAmount adds v to the "usd_amount" field.
-func (u *DetailUpsertOne) AddUsdAmount(v decimal.Decimal) *DetailUpsertOne {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddUsdAmount(v)
-	})
-}
-
 // UpdateUsdAmount sets the "usd_amount" field to the value that was provided on create.
 func (u *DetailUpsertOne) UpdateUsdAmount() *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
@@ -1368,13 +1407,6 @@ func (u *DetailUpsertOne) ClearUsdAmount() *DetailUpsertOne {
 func (u *DetailUpsertOne) SetCommission(v decimal.Decimal) *DetailUpsertOne {
 	return u.Update(func(s *DetailUpsert) {
 		s.SetCommission(v)
-	})
-}
-
-// AddCommission adds v to the "commission" field.
-func (u *DetailUpsertOne) AddCommission(v decimal.Decimal) *DetailUpsertOne {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddCommission(v)
 	})
 }
 
@@ -1713,6 +1745,27 @@ func (u *DetailUpsertBulk) ClearUserID() *DetailUpsertBulk {
 	})
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (u *DetailUpsertBulk) SetDirectContributorID(v uuid.UUID) *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.SetDirectContributorID(v)
+	})
+}
+
+// UpdateDirectContributorID sets the "direct_contributor_id" field to the value that was provided on create.
+func (u *DetailUpsertBulk) UpdateDirectContributorID() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.UpdateDirectContributorID()
+	})
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (u *DetailUpsertBulk) ClearDirectContributorID() *DetailUpsertBulk {
+	return u.Update(func(s *DetailUpsert) {
+		s.ClearDirectContributorID()
+	})
+}
+
 // SetGoodID sets the "good_id" field.
 func (u *DetailUpsertBulk) SetGoodID(v uuid.UUID) *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
@@ -1846,13 +1899,6 @@ func (u *DetailUpsertBulk) SetPaymentCoinUsdCurrency(v decimal.Decimal) *DetailU
 	})
 }
 
-// AddPaymentCoinUsdCurrency adds v to the "payment_coin_usd_currency" field.
-func (u *DetailUpsertBulk) AddPaymentCoinUsdCurrency(v decimal.Decimal) *DetailUpsertBulk {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddPaymentCoinUsdCurrency(v)
-	})
-}
-
 // UpdatePaymentCoinUsdCurrency sets the "payment_coin_usd_currency" field to the value that was provided on create.
 func (u *DetailUpsertBulk) UpdatePaymentCoinUsdCurrency() *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
@@ -1902,13 +1948,6 @@ func (u *DetailUpsertBulk) SetAmount(v decimal.Decimal) *DetailUpsertBulk {
 	})
 }
 
-// AddAmount adds v to the "amount" field.
-func (u *DetailUpsertBulk) AddAmount(v decimal.Decimal) *DetailUpsertBulk {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddAmount(v)
-	})
-}
-
 // UpdateAmount sets the "amount" field to the value that was provided on create.
 func (u *DetailUpsertBulk) UpdateAmount() *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
@@ -1930,13 +1969,6 @@ func (u *DetailUpsertBulk) SetUsdAmount(v decimal.Decimal) *DetailUpsertBulk {
 	})
 }
 
-// AddUsdAmount adds v to the "usd_amount" field.
-func (u *DetailUpsertBulk) AddUsdAmount(v decimal.Decimal) *DetailUpsertBulk {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddUsdAmount(v)
-	})
-}
-
 // UpdateUsdAmount sets the "usd_amount" field to the value that was provided on create.
 func (u *DetailUpsertBulk) UpdateUsdAmount() *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
@@ -1955,13 +1987,6 @@ func (u *DetailUpsertBulk) ClearUsdAmount() *DetailUpsertBulk {
 func (u *DetailUpsertBulk) SetCommission(v decimal.Decimal) *DetailUpsertBulk {
 	return u.Update(func(s *DetailUpsert) {
 		s.SetCommission(v)
-	})
-}
-
-// AddCommission adds v to the "commission" field.
-func (u *DetailUpsertBulk) AddCommission(v decimal.Decimal) *DetailUpsertBulk {
-	return u.Update(func(s *DetailUpsert) {
-		s.AddCommission(v)
 	})
 }
 

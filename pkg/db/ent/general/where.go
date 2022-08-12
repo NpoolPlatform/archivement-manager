@@ -183,6 +183,13 @@ func SelfCommission(v decimal.Decimal) predicate.General {
 	})
 }
 
+// SuperiorCommission applies equality check predicate on the "superior_commission" field. It's identical to SuperiorCommissionEQ.
+func SuperiorCommission(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSuperiorCommission), v))
+	})
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v uint32) predicate.General {
 	return predicate.General(func(s *sql.Selector) {
@@ -1308,6 +1315,96 @@ func SelfCommissionIsNil() predicate.General {
 func SelfCommissionNotNil() predicate.General {
 	return predicate.General(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldSelfCommission)))
+	})
+}
+
+// SuperiorCommissionEQ applies the EQ predicate on the "superior_commission" field.
+func SuperiorCommissionEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionNEQ applies the NEQ predicate on the "superior_commission" field.
+func SuperiorCommissionNEQ(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionIn applies the In predicate on the "superior_commission" field.
+func SuperiorCommissionIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSuperiorCommission), v...))
+	})
+}
+
+// SuperiorCommissionNotIn applies the NotIn predicate on the "superior_commission" field.
+func SuperiorCommissionNotIn(vs ...decimal.Decimal) predicate.General {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.General(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSuperiorCommission), v...))
+	})
+}
+
+// SuperiorCommissionGT applies the GT predicate on the "superior_commission" field.
+func SuperiorCommissionGT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionGTE applies the GTE predicate on the "superior_commission" field.
+func SuperiorCommissionGTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionLT applies the LT predicate on the "superior_commission" field.
+func SuperiorCommissionLT(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionLTE applies the LTE predicate on the "superior_commission" field.
+func SuperiorCommissionLTE(v decimal.Decimal) predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSuperiorCommission), v))
+	})
+}
+
+// SuperiorCommissionIsNil applies the IsNil predicate on the "superior_commission" field.
+func SuperiorCommissionIsNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSuperiorCommission)))
+	})
+}
+
+// SuperiorCommissionNotNil applies the NotNil predicate on the "superior_commission" field.
+func SuperiorCommissionNotNil() predicate.General {
+	return predicate.General(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSuperiorCommission)))
 	})
 }
 

@@ -34,6 +34,13 @@ func validate(info *npool.DetailReq) error { //nolint
 		return status.Error(codes.InvalidArgument, fmt.Sprintf("UserID is invalid: %v", err))
 	}
 
+	if info.DirectContributorID != nil {
+		if _, err := uuid.Parse(info.GetDirectContributorID()); err != nil {
+			logger.Sugar().Errorw("validate", "DirectContributorID", info.DirectContributorID, "error", err)
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("DirectContributorID is invalid: %v", err))
+		}
+	}
+
 	if info.GoodID == nil {
 		logger.Sugar().Errorw("validate", "GoodID", info.GoodID)
 		return status.Error(codes.InvalidArgument, "GoodID is empty")

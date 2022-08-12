@@ -40,6 +40,12 @@ func (Detail) Fields() []ent.Field {
 				return uuid.UUID{}
 			}),
 		field.
+			UUID("direct_contributor_id", uuid.UUID{}).
+			Optional().
+			Default(func() uuid.UUID {
+				return uuid.UUID{}
+			}),
+		field.
 			UUID("good_id", uuid.UUID{}).
 			Optional().
 			Default(func() uuid.UUID {
@@ -74,37 +80,37 @@ func (Detail) Fields() []ent.Field {
 				return uuid.UUID{}
 			}),
 		field.
-			Float("payment_coin_usd_currency").
-			GoType(decimal.Decimal{}).
+			Other("payment_coin_usd_currency", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
 			Uint32("units").
 			Optional().
 			Default(0),
 		field.
-			Float("amount").
-			GoType(decimal.Decimal{}).
+			Other("amount", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
-			Float("usd_amount").
-			GoType(decimal.Decimal{}).
+			Other("usd_amount", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
-			Float("commission").
-			GoType(decimal.Decimal{}).
+			Other("commission", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 	}
 }
 
