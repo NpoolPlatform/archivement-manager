@@ -206,20 +206,6 @@ func (gc *GeneralCreate) SetNillableSelfCommission(d *decimal.Decimal) *GeneralC
 	return gc
 }
 
-// SetSuperiorCommission sets the "superior_commission" field.
-func (gc *GeneralCreate) SetSuperiorCommission(d decimal.Decimal) *GeneralCreate {
-	gc.mutation.SetSuperiorCommission(d)
-	return gc
-}
-
-// SetNillableSuperiorCommission sets the "superior_commission" field if the given value is not nil.
-func (gc *GeneralCreate) SetNillableSuperiorCommission(d *decimal.Decimal) *GeneralCreate {
-	if d != nil {
-		gc.SetSuperiorCommission(*d)
-	}
-	return gc
-}
-
 // SetID sets the "id" field.
 func (gc *GeneralCreate) SetID(u uuid.UUID) *GeneralCreate {
 	gc.mutation.SetID(u)
@@ -379,10 +365,6 @@ func (gc *GeneralCreate) defaults() error {
 	if _, ok := gc.mutation.SelfCommission(); !ok {
 		v := general.DefaultSelfCommission
 		gc.mutation.SetSelfCommission(v)
-	}
-	if _, ok := gc.mutation.SuperiorCommission(); !ok {
-		v := general.DefaultSuperiorCommission
-		gc.mutation.SetSuperiorCommission(v)
 	}
 	if _, ok := gc.mutation.ID(); !ok {
 		if general.DefaultID == nil {
@@ -545,14 +527,6 @@ func (gc *GeneralCreate) createSpec() (*General, *sqlgraph.CreateSpec) {
 			Column: general.FieldSelfCommission,
 		})
 		_node.SelfCommission = value
-	}
-	if value, ok := gc.mutation.SuperiorCommission(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeOther,
-			Value:  value,
-			Column: general.FieldSuperiorCommission,
-		})
-		_node.SuperiorCommission = value
 	}
 	return _node, _spec
 }
@@ -851,24 +825,6 @@ func (u *GeneralUpsert) UpdateSelfCommission() *GeneralUpsert {
 // ClearSelfCommission clears the value of the "self_commission" field.
 func (u *GeneralUpsert) ClearSelfCommission() *GeneralUpsert {
 	u.SetNull(general.FieldSelfCommission)
-	return u
-}
-
-// SetSuperiorCommission sets the "superior_commission" field.
-func (u *GeneralUpsert) SetSuperiorCommission(v decimal.Decimal) *GeneralUpsert {
-	u.Set(general.FieldSuperiorCommission, v)
-	return u
-}
-
-// UpdateSuperiorCommission sets the "superior_commission" field to the value that was provided on create.
-func (u *GeneralUpsert) UpdateSuperiorCommission() *GeneralUpsert {
-	u.SetExcluded(general.FieldSuperiorCommission)
-	return u
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (u *GeneralUpsert) ClearSuperiorCommission() *GeneralUpsert {
-	u.SetNull(general.FieldSuperiorCommission)
 	return u
 }
 
@@ -1206,27 +1162,6 @@ func (u *GeneralUpsertOne) UpdateSelfCommission() *GeneralUpsertOne {
 func (u *GeneralUpsertOne) ClearSelfCommission() *GeneralUpsertOne {
 	return u.Update(func(s *GeneralUpsert) {
 		s.ClearSelfCommission()
-	})
-}
-
-// SetSuperiorCommission sets the "superior_commission" field.
-func (u *GeneralUpsertOne) SetSuperiorCommission(v decimal.Decimal) *GeneralUpsertOne {
-	return u.Update(func(s *GeneralUpsert) {
-		s.SetSuperiorCommission(v)
-	})
-}
-
-// UpdateSuperiorCommission sets the "superior_commission" field to the value that was provided on create.
-func (u *GeneralUpsertOne) UpdateSuperiorCommission() *GeneralUpsertOne {
-	return u.Update(func(s *GeneralUpsert) {
-		s.UpdateSuperiorCommission()
-	})
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (u *GeneralUpsertOne) ClearSuperiorCommission() *GeneralUpsertOne {
-	return u.Update(func(s *GeneralUpsert) {
-		s.ClearSuperiorCommission()
 	})
 }
 
@@ -1730,27 +1665,6 @@ func (u *GeneralUpsertBulk) UpdateSelfCommission() *GeneralUpsertBulk {
 func (u *GeneralUpsertBulk) ClearSelfCommission() *GeneralUpsertBulk {
 	return u.Update(func(s *GeneralUpsert) {
 		s.ClearSelfCommission()
-	})
-}
-
-// SetSuperiorCommission sets the "superior_commission" field.
-func (u *GeneralUpsertBulk) SetSuperiorCommission(v decimal.Decimal) *GeneralUpsertBulk {
-	return u.Update(func(s *GeneralUpsert) {
-		s.SetSuperiorCommission(v)
-	})
-}
-
-// UpdateSuperiorCommission sets the "superior_commission" field to the value that was provided on create.
-func (u *GeneralUpsertBulk) UpdateSuperiorCommission() *GeneralUpsertBulk {
-	return u.Update(func(s *GeneralUpsert) {
-		s.UpdateSuperiorCommission()
-	})
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (u *GeneralUpsertBulk) ClearSuperiorCommission() *GeneralUpsertBulk {
-	return u.Update(func(s *GeneralUpsert) {
-		s.ClearSuperiorCommission()
 	})
 }
 

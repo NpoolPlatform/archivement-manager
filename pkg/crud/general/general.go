@@ -44,7 +44,6 @@ func CreateSet(c *ent.GeneralCreate, in *npool.GeneralReq) *ent.GeneralCreate {
 	c.SetSelfUnits(0)
 	c.SetTotalCommission(decimal.NewFromInt(0))
 	c.SetSelfCommission(decimal.NewFromInt(0))
-	c.SetSuperiorCommission(decimal.NewFromInt(0))
 
 	return c
 }
@@ -152,18 +151,6 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 		}
 	}
 
-	superiorCommission := decimal.NewFromInt(0)
-	if in.SuperiorCommission != nil {
-		selfCommission, err = decimal.NewFromString(in.GetSuperiorCommission())
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if superiorCommission.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("SuperiorCommission < 0")
-	}
-
 	stm := info.Update()
 
 	if in.TotalAmount != nil {
@@ -187,10 +174,6 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 	if in.SelfCommission != nil {
 		selfCommission = selfCommission.Add(info.SelfCommission)
 		stm = stm.SetSelfCommission(selfCommission)
-	}
-	if in.SuperiorCommission != nil {
-		superiorCommission = superiorCommission.Add(info.SuperiorCommission)
-		stm = stm.SetSuperiorCommission(selfCommission)
 	}
 
 	return stm, nil
@@ -402,22 +385,6 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 			stm.Where(general.SelfCommissionGT(amount))
 		case cruder.EQ:
 			stm.Where(general.SelfCommissionEQ(amount))
-		default:
-			return nil, fmt.Errorf("invalid general field")
-		}
-	}
-	if conds.SuperiorCommission != nil {
-		amount, err := decimal.NewFromString(conds.GetSuperiorCommission().GetValue())
-		if err != nil {
-			return nil, err
-		}
-		switch conds.GetSuperiorCommission().GetOp() {
-		case cruder.LT:
-			stm.Where(general.SuperiorCommissionLT(amount))
-		case cruder.GT:
-			stm.Where(general.SuperiorCommissionGT(amount))
-		case cruder.EQ:
-			stm.Where(general.SuperiorCommissionEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}

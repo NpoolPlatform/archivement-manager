@@ -56,20 +56,19 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "General",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			general.FieldCreatedAt:          {Type: field.TypeUint32, Column: general.FieldCreatedAt},
-			general.FieldUpdatedAt:          {Type: field.TypeUint32, Column: general.FieldUpdatedAt},
-			general.FieldDeletedAt:          {Type: field.TypeUint32, Column: general.FieldDeletedAt},
-			general.FieldAppID:              {Type: field.TypeUUID, Column: general.FieldAppID},
-			general.FieldUserID:             {Type: field.TypeUUID, Column: general.FieldUserID},
-			general.FieldGoodID:             {Type: field.TypeUUID, Column: general.FieldGoodID},
-			general.FieldCoinTypeID:         {Type: field.TypeUUID, Column: general.FieldCoinTypeID},
-			general.FieldTotalUnits:         {Type: field.TypeUint32, Column: general.FieldTotalUnits},
-			general.FieldSelfUnits:          {Type: field.TypeUint32, Column: general.FieldSelfUnits},
-			general.FieldTotalAmount:        {Type: field.TypeOther, Column: general.FieldTotalAmount},
-			general.FieldSelfAmount:         {Type: field.TypeOther, Column: general.FieldSelfAmount},
-			general.FieldTotalCommission:    {Type: field.TypeOther, Column: general.FieldTotalCommission},
-			general.FieldSelfCommission:     {Type: field.TypeOther, Column: general.FieldSelfCommission},
-			general.FieldSuperiorCommission: {Type: field.TypeOther, Column: general.FieldSuperiorCommission},
+			general.FieldCreatedAt:       {Type: field.TypeUint32, Column: general.FieldCreatedAt},
+			general.FieldUpdatedAt:       {Type: field.TypeUint32, Column: general.FieldUpdatedAt},
+			general.FieldDeletedAt:       {Type: field.TypeUint32, Column: general.FieldDeletedAt},
+			general.FieldAppID:           {Type: field.TypeUUID, Column: general.FieldAppID},
+			general.FieldUserID:          {Type: field.TypeUUID, Column: general.FieldUserID},
+			general.FieldGoodID:          {Type: field.TypeUUID, Column: general.FieldGoodID},
+			general.FieldCoinTypeID:      {Type: field.TypeUUID, Column: general.FieldCoinTypeID},
+			general.FieldTotalUnits:      {Type: field.TypeUint32, Column: general.FieldTotalUnits},
+			general.FieldSelfUnits:       {Type: field.TypeUint32, Column: general.FieldSelfUnits},
+			general.FieldTotalAmount:     {Type: field.TypeOther, Column: general.FieldTotalAmount},
+			general.FieldSelfAmount:      {Type: field.TypeOther, Column: general.FieldSelfAmount},
+			general.FieldTotalCommission: {Type: field.TypeOther, Column: general.FieldTotalCommission},
+			general.FieldSelfCommission:  {Type: field.TypeOther, Column: general.FieldSelfCommission},
 		},
 	}
 	return graph
@@ -307,9 +306,4 @@ func (f *GeneralFilter) WhereTotalCommission(p entql.OtherP) {
 // WhereSelfCommission applies the entql other predicate on the self_commission field.
 func (f *GeneralFilter) WhereSelfCommission(p entql.OtherP) {
 	f.Where(p.Field(general.FieldSelfCommission))
-}
-
-// WhereSuperiorCommission applies the entql other predicate on the superior_commission field.
-func (f *GeneralFilter) WhereSuperiorCommission(p entql.OtherP) {
-	f.Where(p.Field(general.FieldSuperiorCommission))
 }

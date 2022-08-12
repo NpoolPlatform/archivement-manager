@@ -87,13 +87,6 @@ func (General) Fields() []ent.Field {
 			}).
 			Optional().
 			Default(decimal.Decimal{}),
-		field.
-			Other("superior_commission", decimal.Decimal{}).
-			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37,18)",
-			}).
-			Optional().
-			Default(decimal.Decimal{}),
 	}
 }
 

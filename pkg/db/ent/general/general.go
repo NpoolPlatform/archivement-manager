@@ -39,8 +39,6 @@ const (
 	FieldTotalCommission = "total_commission"
 	// FieldSelfCommission holds the string denoting the self_commission field in the database.
 	FieldSelfCommission = "self_commission"
-	// FieldSuperiorCommission holds the string denoting the superior_commission field in the database.
-	FieldSuperiorCommission = "superior_commission"
 	// Table holds the table name of the general in the database.
 	Table = "generals"
 )
@@ -61,7 +59,6 @@ var Columns = []string{
 	FieldSelfAmount,
 	FieldTotalCommission,
 	FieldSelfCommission,
-	FieldSuperiorCommission,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -111,8 +108,6 @@ var (
 	DefaultTotalCommission decimal.Decimal
 	// DefaultSelfCommission holds the default value on creation for the "self_commission" field.
 	DefaultSelfCommission decimal.Decimal
-	// DefaultSuperiorCommission holds the default value on creation for the "superior_commission" field.
-	DefaultSuperiorCommission decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

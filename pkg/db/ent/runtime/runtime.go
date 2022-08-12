@@ -175,10 +175,6 @@ func init() {
 	generalDescSelfCommission := generalFields[10].Descriptor()
 	// general.DefaultSelfCommission holds the default value on creation for the self_commission field.
 	general.DefaultSelfCommission = generalDescSelfCommission.Default.(decimal.Decimal)
-	// generalDescSuperiorCommission is the schema descriptor for superior_commission field.
-	generalDescSuperiorCommission := generalFields[11].Descriptor()
-	// general.DefaultSuperiorCommission holds the default value on creation for the superior_commission field.
-	general.DefaultSuperiorCommission = generalDescSuperiorCommission.Default.(decimal.Decimal)
 	// generalDescID is the schema descriptor for id field.
 	generalDescID := generalFields[0].Descriptor()
 	// general.DefaultID holds the default value on creation for the id field.

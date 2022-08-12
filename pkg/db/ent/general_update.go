@@ -298,26 +298,6 @@ func (gu *GeneralUpdate) ClearSelfCommission() *GeneralUpdate {
 	return gu
 }
 
-// SetSuperiorCommission sets the "superior_commission" field.
-func (gu *GeneralUpdate) SetSuperiorCommission(d decimal.Decimal) *GeneralUpdate {
-	gu.mutation.SetSuperiorCommission(d)
-	return gu
-}
-
-// SetNillableSuperiorCommission sets the "superior_commission" field if the given value is not nil.
-func (gu *GeneralUpdate) SetNillableSuperiorCommission(d *decimal.Decimal) *GeneralUpdate {
-	if d != nil {
-		gu.SetSuperiorCommission(*d)
-	}
-	return gu
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (gu *GeneralUpdate) ClearSuperiorCommission() *GeneralUpdate {
-	gu.mutation.ClearSuperiorCommission()
-	return gu
-}
-
 // Mutation returns the GeneralMutation object of the builder.
 func (gu *GeneralUpdate) Mutation() *GeneralMutation {
 	return gu.mutation
@@ -594,19 +574,6 @@ func (gu *GeneralUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeOther,
 			Column: general.FieldSelfCommission,
-		})
-	}
-	if value, ok := gu.mutation.SuperiorCommission(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeOther,
-			Value:  value,
-			Column: general.FieldSuperiorCommission,
-		})
-	}
-	if gu.mutation.SuperiorCommissionCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeOther,
-			Column: general.FieldSuperiorCommission,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
@@ -894,26 +861,6 @@ func (guo *GeneralUpdateOne) SetNillableSelfCommission(d *decimal.Decimal) *Gene
 // ClearSelfCommission clears the value of the "self_commission" field.
 func (guo *GeneralUpdateOne) ClearSelfCommission() *GeneralUpdateOne {
 	guo.mutation.ClearSelfCommission()
-	return guo
-}
-
-// SetSuperiorCommission sets the "superior_commission" field.
-func (guo *GeneralUpdateOne) SetSuperiorCommission(d decimal.Decimal) *GeneralUpdateOne {
-	guo.mutation.SetSuperiorCommission(d)
-	return guo
-}
-
-// SetNillableSuperiorCommission sets the "superior_commission" field if the given value is not nil.
-func (guo *GeneralUpdateOne) SetNillableSuperiorCommission(d *decimal.Decimal) *GeneralUpdateOne {
-	if d != nil {
-		guo.SetSuperiorCommission(*d)
-	}
-	return guo
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (guo *GeneralUpdateOne) ClearSuperiorCommission() *GeneralUpdateOne {
-	guo.mutation.ClearSuperiorCommission()
 	return guo
 }
 
@@ -1217,19 +1164,6 @@ func (guo *GeneralUpdateOne) sqlSave(ctx context.Context) (_node *General, err e
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeOther,
 			Column: general.FieldSelfCommission,
-		})
-	}
-	if value, ok := guo.mutation.SuperiorCommission(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeOther,
-			Value:  value,
-			Column: general.FieldSuperiorCommission,
-		})
-	}
-	if guo.mutation.SuperiorCommissionCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeOther,
-			Column: general.FieldSuperiorCommission,
 		})
 	}
 	_node = &General{config: guo.config}

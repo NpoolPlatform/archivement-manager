@@ -43,8 +43,6 @@ type General struct {
 	TotalCommission decimal.Decimal `json:"total_commission,omitempty"`
 	// SelfCommission holds the value of the "self_commission" field.
 	SelfCommission decimal.Decimal `json:"self_commission,omitempty"`
-	// SuperiorCommission holds the value of the "superior_commission" field.
-	SuperiorCommission decimal.Decimal `json:"superior_commission,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -52,7 +50,7 @@ func (*General) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case general.FieldTotalAmount, general.FieldSelfAmount, general.FieldTotalCommission, general.FieldSelfCommission, general.FieldSuperiorCommission:
+		case general.FieldTotalAmount, general.FieldSelfAmount, general.FieldTotalCommission, general.FieldSelfCommission:
 			values[i] = new(decimal.Decimal)
 		case general.FieldCreatedAt, general.FieldUpdatedAt, general.FieldDeletedAt, general.FieldTotalUnits, general.FieldSelfUnits:
 			values[i] = new(sql.NullInt64)
@@ -157,12 +155,6 @@ func (ge *General) assignValues(columns []string, values []interface{}) error {
 			} else if value != nil {
 				ge.SelfCommission = *value
 			}
-		case general.FieldSuperiorCommission:
-			if value, ok := values[i].(*decimal.Decimal); !ok {
-				return fmt.Errorf("unexpected type %T for field superior_commission", values[i])
-			} else if value != nil {
-				ge.SuperiorCommission = *value
-			}
 		}
 	}
 	return nil
@@ -217,8 +209,6 @@ func (ge *General) String() string {
 	builder.WriteString(fmt.Sprintf("%v", ge.TotalCommission))
 	builder.WriteString(", self_commission=")
 	builder.WriteString(fmt.Sprintf("%v", ge.SelfCommission))
-	builder.WriteString(", superior_commission=")
-	builder.WriteString(fmt.Sprintf("%v", ge.SuperiorCommission))
 	builder.WriteByte(')')
 	return builder.String()
 }

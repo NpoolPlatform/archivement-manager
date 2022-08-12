@@ -1619,32 +1619,31 @@ func (m *DetailMutation) ResetEdge(name string) error {
 // GeneralMutation represents an operation that mutates the General nodes in the graph.
 type GeneralMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *uuid.UUID
-	created_at          *uint32
-	addcreated_at       *int32
-	updated_at          *uint32
-	addupdated_at       *int32
-	deleted_at          *uint32
-	adddeleted_at       *int32
-	app_id              *uuid.UUID
-	user_id             *uuid.UUID
-	good_id             *uuid.UUID
-	coin_type_id        *uuid.UUID
-	total_units         *uint32
-	addtotal_units      *int32
-	self_units          *uint32
-	addself_units       *int32
-	total_amount        *decimal.Decimal
-	self_amount         *decimal.Decimal
-	total_commission    *decimal.Decimal
-	self_commission     *decimal.Decimal
-	superior_commission *decimal.Decimal
-	clearedFields       map[string]struct{}
-	done                bool
-	oldValue            func(context.Context) (*General, error)
-	predicates          []predicate.General
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	created_at       *uint32
+	addcreated_at    *int32
+	updated_at       *uint32
+	addupdated_at    *int32
+	deleted_at       *uint32
+	adddeleted_at    *int32
+	app_id           *uuid.UUID
+	user_id          *uuid.UUID
+	good_id          *uuid.UUID
+	coin_type_id     *uuid.UUID
+	total_units      *uint32
+	addtotal_units   *int32
+	self_units       *uint32
+	addself_units    *int32
+	total_amount     *decimal.Decimal
+	self_amount      *decimal.Decimal
+	total_commission *decimal.Decimal
+	self_commission  *decimal.Decimal
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*General, error)
+	predicates       []predicate.General
 }
 
 var _ ent.Mutation = (*GeneralMutation)(nil)
@@ -2451,55 +2450,6 @@ func (m *GeneralMutation) ResetSelfCommission() {
 	delete(m.clearedFields, general.FieldSelfCommission)
 }
 
-// SetSuperiorCommission sets the "superior_commission" field.
-func (m *GeneralMutation) SetSuperiorCommission(d decimal.Decimal) {
-	m.superior_commission = &d
-}
-
-// SuperiorCommission returns the value of the "superior_commission" field in the mutation.
-func (m *GeneralMutation) SuperiorCommission() (r decimal.Decimal, exists bool) {
-	v := m.superior_commission
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldSuperiorCommission returns the old "superior_commission" field's value of the General entity.
-// If the General object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GeneralMutation) OldSuperiorCommission(ctx context.Context) (v decimal.Decimal, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSuperiorCommission is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSuperiorCommission requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSuperiorCommission: %w", err)
-	}
-	return oldValue.SuperiorCommission, nil
-}
-
-// ClearSuperiorCommission clears the value of the "superior_commission" field.
-func (m *GeneralMutation) ClearSuperiorCommission() {
-	m.superior_commission = nil
-	m.clearedFields[general.FieldSuperiorCommission] = struct{}{}
-}
-
-// SuperiorCommissionCleared returns if the "superior_commission" field was cleared in this mutation.
-func (m *GeneralMutation) SuperiorCommissionCleared() bool {
-	_, ok := m.clearedFields[general.FieldSuperiorCommission]
-	return ok
-}
-
-// ResetSuperiorCommission resets all changes to the "superior_commission" field.
-func (m *GeneralMutation) ResetSuperiorCommission() {
-	m.superior_commission = nil
-	delete(m.clearedFields, general.FieldSuperiorCommission)
-}
-
 // Where appends a list predicates to the GeneralMutation builder.
 func (m *GeneralMutation) Where(ps ...predicate.General) {
 	m.predicates = append(m.predicates, ps...)
@@ -2519,7 +2469,7 @@ func (m *GeneralMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GeneralMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, general.FieldCreatedAt)
 	}
@@ -2559,9 +2509,6 @@ func (m *GeneralMutation) Fields() []string {
 	if m.self_commission != nil {
 		fields = append(fields, general.FieldSelfCommission)
 	}
-	if m.superior_commission != nil {
-		fields = append(fields, general.FieldSuperiorCommission)
-	}
 	return fields
 }
 
@@ -2596,8 +2543,6 @@ func (m *GeneralMutation) Field(name string) (ent.Value, bool) {
 		return m.TotalCommission()
 	case general.FieldSelfCommission:
 		return m.SelfCommission()
-	case general.FieldSuperiorCommission:
-		return m.SuperiorCommission()
 	}
 	return nil, false
 }
@@ -2633,8 +2578,6 @@ func (m *GeneralMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldTotalCommission(ctx)
 	case general.FieldSelfCommission:
 		return m.OldSelfCommission(ctx)
-	case general.FieldSuperiorCommission:
-		return m.OldSuperiorCommission(ctx)
 	}
 	return nil, fmt.Errorf("unknown General field %s", name)
 }
@@ -2734,13 +2677,6 @@ func (m *GeneralMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSelfCommission(v)
-		return nil
-	case general.FieldSuperiorCommission:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSuperiorCommission(v)
 		return nil
 	}
 	return fmt.Errorf("unknown General field %s", name)
@@ -2865,9 +2801,6 @@ func (m *GeneralMutation) ClearedFields() []string {
 	if m.FieldCleared(general.FieldSelfCommission) {
 		fields = append(fields, general.FieldSelfCommission)
 	}
-	if m.FieldCleared(general.FieldSuperiorCommission) {
-		fields = append(fields, general.FieldSuperiorCommission)
-	}
 	return fields
 }
 
@@ -2911,9 +2844,6 @@ func (m *GeneralMutation) ClearField(name string) error {
 		return nil
 	case general.FieldSelfCommission:
 		m.ClearSelfCommission()
-		return nil
-	case general.FieldSuperiorCommission:
-		m.ClearSuperiorCommission()
 		return nil
 	}
 	return fmt.Errorf("unknown General nullable field %s", name)
@@ -2961,9 +2891,6 @@ func (m *GeneralMutation) ResetField(name string) error {
 		return nil
 	case general.FieldSelfCommission:
 		m.ResetSelfCommission()
-		return nil
-	case general.FieldSuperiorCommission:
-		m.ResetSuperiorCommission()
 		return nil
 	}
 	return fmt.Errorf("unknown General field %s", name)
