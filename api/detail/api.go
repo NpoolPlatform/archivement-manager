@@ -8,11 +8,11 @@ import (
 )
 
 type Server struct {
-	detail.UnimplementedDetailMgrServer
+	detail.UnimplementedManagerServer
 }
 
 func Register(server grpc.ServiceRegistrar) {
-	detail.RegisterDetailMgrServer(server, &Server{})
+	detail.RegisterManagerServer(server, &Server{})
 }
 
 func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
