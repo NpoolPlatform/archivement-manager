@@ -60,33 +60,33 @@ func (General) Fields() []ent.Field {
 			Optional().
 			Default(0),
 		field.
-			Float("total_amount").
-			GoType(decimal.Decimal{}).
+			Other("total_amount", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
-			Float("self_amount").
-			GoType(decimal.Decimal{}).
+			Other("self_amount", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
-			Float("total_commission").
-			GoType(decimal.Decimal{}).
+			Other("total_commission", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 		field.
-			Float("self_commission").
-			GoType(decimal.Decimal{}).
+			Other("self_commission", decimal.Decimal{}).
 			SchemaType(map[string]string{
-				dialect.MySQL: "decimal(37, 18)",
+				dialect.MySQL: "decimal(37,18)",
 			}).
-			Optional(),
+			Optional().
+			Default(decimal.Decimal{}),
 	}
 }
 

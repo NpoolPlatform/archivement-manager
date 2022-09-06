@@ -31,6 +31,9 @@ func CreateSet(c *ent.DetailCreate, in *npool.DetailReq) (*ent.DetailCreate, err
 	if in.UserID != nil {
 		c.SetUserID(uuid.MustParse(in.GetUserID()))
 	}
+	if in.DirectContributorID != nil {
+		c.SetDirectContributorID(uuid.MustParse(in.GetDirectContributorID()))
+	}
 	if in.GoodID != nil {
 		c.SetGoodID(uuid.MustParse(in.GetGoodID()))
 	}
@@ -201,6 +204,14 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.DetailQuery, error
 		switch conds.GetUserID().GetOp() {
 		case cruder.EQ:
 			stm.Where(detail.UserID(uuid.MustParse(conds.GetUserID().GetValue())))
+		default:
+			return nil, fmt.Errorf("invalid detail field")
+		}
+	}
+	if conds.DirectContributorID != nil {
+		switch conds.GetDirectContributorID().GetOp() {
+		case cruder.EQ:
+			stm.Where(detail.DirectContributorID(uuid.MustParse(conds.GetDirectContributorID().GetValue())))
 		default:
 			return nil, fmt.Errorf("invalid detail field")
 		}

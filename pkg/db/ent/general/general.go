@@ -5,6 +5,7 @@ package general
 import (
 	"entgo.io/ent"
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -99,6 +100,14 @@ var (
 	DefaultTotalUnits uint32
 	// DefaultSelfUnits holds the default value on creation for the "self_units" field.
 	DefaultSelfUnits uint32
+	// DefaultTotalAmount holds the default value on creation for the "total_amount" field.
+	DefaultTotalAmount decimal.Decimal
+	// DefaultSelfAmount holds the default value on creation for the "self_amount" field.
+	DefaultSelfAmount decimal.Decimal
+	// DefaultTotalCommission holds the default value on creation for the "total_commission" field.
+	DefaultTotalCommission decimal.Decimal
+	// DefaultSelfCommission holds the default value on creation for the "self_commission" field.
+	DefaultSelfCommission decimal.Decimal
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

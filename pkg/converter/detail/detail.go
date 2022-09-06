@@ -14,6 +14,7 @@ func Ent2Grpc(row *ent.Detail) *npool.Detail {
 		ID:                     row.ID.String(),
 		AppID:                  row.AppID.String(),
 		UserID:                 row.UserID.String(),
+		DirectContributorID:    row.DirectContributorID.String(),
 		GoodID:                 row.GoodID.String(),
 		OrderID:                row.OrderID.String(),
 		SelfOrder:              row.SelfOrder,

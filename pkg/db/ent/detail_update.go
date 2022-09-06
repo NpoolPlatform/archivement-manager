@@ -124,6 +124,26 @@ func (du *DetailUpdate) ClearUserID() *DetailUpdate {
 	return du
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (du *DetailUpdate) SetDirectContributorID(u uuid.UUID) *DetailUpdate {
+	du.mutation.SetDirectContributorID(u)
+	return du
+}
+
+// SetNillableDirectContributorID sets the "direct_contributor_id" field if the given value is not nil.
+func (du *DetailUpdate) SetNillableDirectContributorID(u *uuid.UUID) *DetailUpdate {
+	if u != nil {
+		du.SetDirectContributorID(*u)
+	}
+	return du
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (du *DetailUpdate) ClearDirectContributorID() *DetailUpdate {
+	du.mutation.ClearDirectContributorID()
+	return du
+}
+
 // SetGoodID sets the "good_id" field.
 func (du *DetailUpdate) SetGoodID(u uuid.UUID) *DetailUpdate {
 	du.mutation.SetGoodID(u)
@@ -246,7 +266,6 @@ func (du *DetailUpdate) ClearPaymentCoinTypeID() *DetailUpdate {
 
 // SetPaymentCoinUsdCurrency sets the "payment_coin_usd_currency" field.
 func (du *DetailUpdate) SetPaymentCoinUsdCurrency(d decimal.Decimal) *DetailUpdate {
-	du.mutation.ResetPaymentCoinUsdCurrency()
 	du.mutation.SetPaymentCoinUsdCurrency(d)
 	return du
 }
@@ -256,12 +275,6 @@ func (du *DetailUpdate) SetNillablePaymentCoinUsdCurrency(d *decimal.Decimal) *D
 	if d != nil {
 		du.SetPaymentCoinUsdCurrency(*d)
 	}
-	return du
-}
-
-// AddPaymentCoinUsdCurrency adds d to the "payment_coin_usd_currency" field.
-func (du *DetailUpdate) AddPaymentCoinUsdCurrency(d decimal.Decimal) *DetailUpdate {
-	du.mutation.AddPaymentCoinUsdCurrency(d)
 	return du
 }
 
@@ -300,7 +313,6 @@ func (du *DetailUpdate) ClearUnits() *DetailUpdate {
 
 // SetAmount sets the "amount" field.
 func (du *DetailUpdate) SetAmount(d decimal.Decimal) *DetailUpdate {
-	du.mutation.ResetAmount()
 	du.mutation.SetAmount(d)
 	return du
 }
@@ -313,12 +325,6 @@ func (du *DetailUpdate) SetNillableAmount(d *decimal.Decimal) *DetailUpdate {
 	return du
 }
 
-// AddAmount adds d to the "amount" field.
-func (du *DetailUpdate) AddAmount(d decimal.Decimal) *DetailUpdate {
-	du.mutation.AddAmount(d)
-	return du
-}
-
 // ClearAmount clears the value of the "amount" field.
 func (du *DetailUpdate) ClearAmount() *DetailUpdate {
 	du.mutation.ClearAmount()
@@ -327,7 +333,6 @@ func (du *DetailUpdate) ClearAmount() *DetailUpdate {
 
 // SetUsdAmount sets the "usd_amount" field.
 func (du *DetailUpdate) SetUsdAmount(d decimal.Decimal) *DetailUpdate {
-	du.mutation.ResetUsdAmount()
 	du.mutation.SetUsdAmount(d)
 	return du
 }
@@ -340,12 +345,6 @@ func (du *DetailUpdate) SetNillableUsdAmount(d *decimal.Decimal) *DetailUpdate {
 	return du
 }
 
-// AddUsdAmount adds d to the "usd_amount" field.
-func (du *DetailUpdate) AddUsdAmount(d decimal.Decimal) *DetailUpdate {
-	du.mutation.AddUsdAmount(d)
-	return du
-}
-
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (du *DetailUpdate) ClearUsdAmount() *DetailUpdate {
 	du.mutation.ClearUsdAmount()
@@ -354,7 +353,6 @@ func (du *DetailUpdate) ClearUsdAmount() *DetailUpdate {
 
 // SetCommission sets the "commission" field.
 func (du *DetailUpdate) SetCommission(d decimal.Decimal) *DetailUpdate {
-	du.mutation.ResetCommission()
 	du.mutation.SetCommission(d)
 	return du
 }
@@ -364,12 +362,6 @@ func (du *DetailUpdate) SetNillableCommission(d *decimal.Decimal) *DetailUpdate 
 	if d != nil {
 		du.SetCommission(*d)
 	}
-	return du
-}
-
-// AddCommission adds d to the "commission" field.
-func (du *DetailUpdate) AddCommission(d decimal.Decimal) *DetailUpdate {
-	du.mutation.AddCommission(d)
 	return du
 }
 
@@ -539,6 +531,19 @@ func (du *DetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: detail.FieldUserID,
 		})
 	}
+	if value, ok := du.mutation.DirectContributorID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: detail.FieldDirectContributorID,
+		})
+	}
+	if du.mutation.DirectContributorIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Column: detail.FieldDirectContributorID,
+		})
+	}
 	if value, ok := du.mutation.GoodID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -619,21 +624,14 @@ func (du *DetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := du.mutation.PaymentCoinUsdCurrency(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldPaymentCoinUsdCurrency,
-		})
-	}
-	if value, ok := du.mutation.AddedPaymentCoinUsdCurrency(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldPaymentCoinUsdCurrency,
 		})
 	}
 	if du.mutation.PaymentCoinUsdCurrencyCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldPaymentCoinUsdCurrency,
 		})
 	}
@@ -659,61 +657,40 @@ func (du *DetailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := du.mutation.Amount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldAmount,
-		})
-	}
-	if value, ok := du.mutation.AddedAmount(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldAmount,
 		})
 	}
 	if du.mutation.AmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldAmount,
 		})
 	}
 	if value, ok := du.mutation.UsdAmount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldUsdAmount,
-		})
-	}
-	if value, ok := du.mutation.AddedUsdAmount(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldUsdAmount,
 		})
 	}
 	if du.mutation.UsdAmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldUsdAmount,
 		})
 	}
 	if value, ok := du.mutation.Commission(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldCommission,
-		})
-	}
-	if value, ok := du.mutation.AddedCommission(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldCommission,
 		})
 	}
 	if du.mutation.CommissionCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldCommission,
 		})
 	}
@@ -828,6 +805,26 @@ func (duo *DetailUpdateOne) SetNillableUserID(u *uuid.UUID) *DetailUpdateOne {
 // ClearUserID clears the value of the "user_id" field.
 func (duo *DetailUpdateOne) ClearUserID() *DetailUpdateOne {
 	duo.mutation.ClearUserID()
+	return duo
+}
+
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (duo *DetailUpdateOne) SetDirectContributorID(u uuid.UUID) *DetailUpdateOne {
+	duo.mutation.SetDirectContributorID(u)
+	return duo
+}
+
+// SetNillableDirectContributorID sets the "direct_contributor_id" field if the given value is not nil.
+func (duo *DetailUpdateOne) SetNillableDirectContributorID(u *uuid.UUID) *DetailUpdateOne {
+	if u != nil {
+		duo.SetDirectContributorID(*u)
+	}
+	return duo
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (duo *DetailUpdateOne) ClearDirectContributorID() *DetailUpdateOne {
+	duo.mutation.ClearDirectContributorID()
 	return duo
 }
 
@@ -953,7 +950,6 @@ func (duo *DetailUpdateOne) ClearPaymentCoinTypeID() *DetailUpdateOne {
 
 // SetPaymentCoinUsdCurrency sets the "payment_coin_usd_currency" field.
 func (duo *DetailUpdateOne) SetPaymentCoinUsdCurrency(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.ResetPaymentCoinUsdCurrency()
 	duo.mutation.SetPaymentCoinUsdCurrency(d)
 	return duo
 }
@@ -963,12 +959,6 @@ func (duo *DetailUpdateOne) SetNillablePaymentCoinUsdCurrency(d *decimal.Decimal
 	if d != nil {
 		duo.SetPaymentCoinUsdCurrency(*d)
 	}
-	return duo
-}
-
-// AddPaymentCoinUsdCurrency adds d to the "payment_coin_usd_currency" field.
-func (duo *DetailUpdateOne) AddPaymentCoinUsdCurrency(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.AddPaymentCoinUsdCurrency(d)
 	return duo
 }
 
@@ -1007,7 +997,6 @@ func (duo *DetailUpdateOne) ClearUnits() *DetailUpdateOne {
 
 // SetAmount sets the "amount" field.
 func (duo *DetailUpdateOne) SetAmount(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.ResetAmount()
 	duo.mutation.SetAmount(d)
 	return duo
 }
@@ -1020,12 +1009,6 @@ func (duo *DetailUpdateOne) SetNillableAmount(d *decimal.Decimal) *DetailUpdateO
 	return duo
 }
 
-// AddAmount adds d to the "amount" field.
-func (duo *DetailUpdateOne) AddAmount(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.AddAmount(d)
-	return duo
-}
-
 // ClearAmount clears the value of the "amount" field.
 func (duo *DetailUpdateOne) ClearAmount() *DetailUpdateOne {
 	duo.mutation.ClearAmount()
@@ -1034,7 +1017,6 @@ func (duo *DetailUpdateOne) ClearAmount() *DetailUpdateOne {
 
 // SetUsdAmount sets the "usd_amount" field.
 func (duo *DetailUpdateOne) SetUsdAmount(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.ResetUsdAmount()
 	duo.mutation.SetUsdAmount(d)
 	return duo
 }
@@ -1047,12 +1029,6 @@ func (duo *DetailUpdateOne) SetNillableUsdAmount(d *decimal.Decimal) *DetailUpda
 	return duo
 }
 
-// AddUsdAmount adds d to the "usd_amount" field.
-func (duo *DetailUpdateOne) AddUsdAmount(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.AddUsdAmount(d)
-	return duo
-}
-
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (duo *DetailUpdateOne) ClearUsdAmount() *DetailUpdateOne {
 	duo.mutation.ClearUsdAmount()
@@ -1061,7 +1037,6 @@ func (duo *DetailUpdateOne) ClearUsdAmount() *DetailUpdateOne {
 
 // SetCommission sets the "commission" field.
 func (duo *DetailUpdateOne) SetCommission(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.ResetCommission()
 	duo.mutation.SetCommission(d)
 	return duo
 }
@@ -1071,12 +1046,6 @@ func (duo *DetailUpdateOne) SetNillableCommission(d *decimal.Decimal) *DetailUpd
 	if d != nil {
 		duo.SetCommission(*d)
 	}
-	return duo
-}
-
-// AddCommission adds d to the "commission" field.
-func (duo *DetailUpdateOne) AddCommission(d decimal.Decimal) *DetailUpdateOne {
-	duo.mutation.AddCommission(d)
 	return duo
 }
 
@@ -1270,6 +1239,19 @@ func (duo *DetailUpdateOne) sqlSave(ctx context.Context) (_node *Detail, err err
 			Column: detail.FieldUserID,
 		})
 	}
+	if value, ok := duo.mutation.DirectContributorID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: detail.FieldDirectContributorID,
+		})
+	}
+	if duo.mutation.DirectContributorIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Column: detail.FieldDirectContributorID,
+		})
+	}
 	if value, ok := duo.mutation.GoodID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -1350,21 +1332,14 @@ func (duo *DetailUpdateOne) sqlSave(ctx context.Context) (_node *Detail, err err
 	}
 	if value, ok := duo.mutation.PaymentCoinUsdCurrency(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldPaymentCoinUsdCurrency,
-		})
-	}
-	if value, ok := duo.mutation.AddedPaymentCoinUsdCurrency(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldPaymentCoinUsdCurrency,
 		})
 	}
 	if duo.mutation.PaymentCoinUsdCurrencyCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldPaymentCoinUsdCurrency,
 		})
 	}
@@ -1390,61 +1365,40 @@ func (duo *DetailUpdateOne) sqlSave(ctx context.Context) (_node *Detail, err err
 	}
 	if value, ok := duo.mutation.Amount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldAmount,
-		})
-	}
-	if value, ok := duo.mutation.AddedAmount(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldAmount,
 		})
 	}
 	if duo.mutation.AmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldAmount,
 		})
 	}
 	if value, ok := duo.mutation.UsdAmount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldUsdAmount,
-		})
-	}
-	if value, ok := duo.mutation.AddedUsdAmount(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldUsdAmount,
 		})
 	}
 	if duo.mutation.UsdAmountCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldUsdAmount,
 		})
 	}
 	if value, ok := duo.mutation.Commission(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: detail.FieldCommission,
-		})
-	}
-	if value, ok := duo.mutation.AddedCommission(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Value:  value,
 			Column: detail.FieldCommission,
 		})
 	}
 	if duo.mutation.CommissionCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeOther,
 			Column: detail.FieldCommission,
 		})
 	}

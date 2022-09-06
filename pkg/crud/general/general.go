@@ -290,33 +290,33 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 		}
 	}
 	if conds.TotalAmount != nil {
-		incoming, err := decimal.NewFromString(conds.GetTotalAmount().GetValue())
+		amount, err := decimal.NewFromString(conds.GetTotalAmount().GetValue())
 		if err != nil {
 			return nil, err
 		}
 		switch conds.GetTotalAmount().GetOp() {
 		case cruder.LT:
-			stm.Where(general.TotalAmountLT(incoming))
+			stm.Where(general.TotalAmountLT(amount))
 		case cruder.GT:
-			stm.Where(general.TotalAmountGT(incoming))
+			stm.Where(general.TotalAmountGT(amount))
 		case cruder.EQ:
-			stm.Where(general.TotalAmountEQ(incoming))
+			stm.Where(general.TotalAmountEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}
 	}
 	if conds.SelfAmount != nil {
-		incoming, err := decimal.NewFromString(conds.GetSelfAmount().GetValue())
+		amount, err := decimal.NewFromString(conds.GetSelfAmount().GetValue())
 		if err != nil {
 			return nil, err
 		}
 		switch conds.GetSelfAmount().GetOp() {
 		case cruder.LT:
-			stm.Where(general.SelfAmountLT(incoming))
+			stm.Where(general.SelfAmountLT(amount))
 		case cruder.GT:
-			stm.Where(general.SelfAmountGT(incoming))
+			stm.Where(general.SelfAmountGT(amount))
 		case cruder.EQ:
-			stm.Where(general.SelfAmountEQ(incoming))
+			stm.Where(general.SelfAmountEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}
@@ -346,33 +346,33 @@ func setQueryConds(conds *npool.Conds, cli *ent.Client) (*ent.GeneralQuery, erro
 		}
 	}
 	if conds.TotalCommission != nil {
-		incoming, err := decimal.NewFromString(conds.GetTotalCommission().GetValue())
+		amount, err := decimal.NewFromString(conds.GetTotalCommission().GetValue())
 		if err != nil {
 			return nil, err
 		}
 		switch conds.GetTotalCommission().GetOp() {
 		case cruder.LT:
-			stm.Where(general.TotalCommissionLT(incoming))
+			stm.Where(general.TotalCommissionLT(amount))
 		case cruder.GT:
-			stm.Where(general.TotalCommissionGT(incoming))
+			stm.Where(general.TotalCommissionGT(amount))
 		case cruder.EQ:
-			stm.Where(general.TotalCommissionEQ(incoming))
+			stm.Where(general.TotalCommissionEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}
 	}
 	if conds.SelfCommission != nil {
-		incoming, err := decimal.NewFromString(conds.GetSelfCommission().GetValue())
+		amount, err := decimal.NewFromString(conds.GetSelfCommission().GetValue())
 		if err != nil {
 			return nil, err
 		}
 		switch conds.GetSelfCommission().GetOp() {
 		case cruder.LT:
-			stm.Where(general.SelfCommissionLT(incoming))
+			stm.Where(general.SelfCommissionLT(amount))
 		case cruder.GT:
-			stm.Where(general.SelfCommissionGT(incoming))
+			stm.Where(general.SelfCommissionGT(amount))
 		case cruder.EQ:
-			stm.Where(general.SelfCommissionEQ(incoming))
+			stm.Where(general.SelfCommissionEQ(amount))
 		default:
 			return nil, fmt.Errorf("invalid general field")
 		}

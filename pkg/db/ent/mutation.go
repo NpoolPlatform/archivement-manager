@@ -33,37 +33,34 @@ const (
 // DetailMutation represents an operation that mutates the Detail nodes in the graph.
 type DetailMutation struct {
 	config
-	op                           Op
-	typ                          string
-	id                           *uuid.UUID
-	created_at                   *uint32
-	addcreated_at                *int32
-	updated_at                   *uint32
-	addupdated_at                *int32
-	deleted_at                   *uint32
-	adddeleted_at                *int32
-	app_id                       *uuid.UUID
-	user_id                      *uuid.UUID
-	good_id                      *uuid.UUID
-	order_id                     *uuid.UUID
-	self_order                   *bool
-	payment_id                   *uuid.UUID
-	coin_type_id                 *uuid.UUID
-	payment_coin_type_id         *uuid.UUID
-	payment_coin_usd_currency    *decimal.Decimal
-	addpayment_coin_usd_currency *decimal.Decimal
-	units                        *uint32
-	addunits                     *int32
-	amount                       *decimal.Decimal
-	addamount                    *decimal.Decimal
-	usd_amount                   *decimal.Decimal
-	addusd_amount                *decimal.Decimal
-	commission                   *decimal.Decimal
-	addcommission                *decimal.Decimal
-	clearedFields                map[string]struct{}
-	done                         bool
-	oldValue                     func(context.Context) (*Detail, error)
-	predicates                   []predicate.Detail
+	op                        Op
+	typ                       string
+	id                        *uuid.UUID
+	created_at                *uint32
+	addcreated_at             *int32
+	updated_at                *uint32
+	addupdated_at             *int32
+	deleted_at                *uint32
+	adddeleted_at             *int32
+	app_id                    *uuid.UUID
+	user_id                   *uuid.UUID
+	direct_contributor_id     *uuid.UUID
+	good_id                   *uuid.UUID
+	order_id                  *uuid.UUID
+	self_order                *bool
+	payment_id                *uuid.UUID
+	coin_type_id              *uuid.UUID
+	payment_coin_type_id      *uuid.UUID
+	payment_coin_usd_currency *decimal.Decimal
+	units                     *uint32
+	addunits                  *int32
+	amount                    *decimal.Decimal
+	usd_amount                *decimal.Decimal
+	commission                *decimal.Decimal
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*Detail, error)
+	predicates                []predicate.Detail
 }
 
 var _ ent.Mutation = (*DetailMutation)(nil)
@@ -436,6 +433,55 @@ func (m *DetailMutation) ResetUserID() {
 	delete(m.clearedFields, detail.FieldUserID)
 }
 
+// SetDirectContributorID sets the "direct_contributor_id" field.
+func (m *DetailMutation) SetDirectContributorID(u uuid.UUID) {
+	m.direct_contributor_id = &u
+}
+
+// DirectContributorID returns the value of the "direct_contributor_id" field in the mutation.
+func (m *DetailMutation) DirectContributorID() (r uuid.UUID, exists bool) {
+	v := m.direct_contributor_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDirectContributorID returns the old "direct_contributor_id" field's value of the Detail entity.
+// If the Detail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DetailMutation) OldDirectContributorID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDirectContributorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDirectContributorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDirectContributorID: %w", err)
+	}
+	return oldValue.DirectContributorID, nil
+}
+
+// ClearDirectContributorID clears the value of the "direct_contributor_id" field.
+func (m *DetailMutation) ClearDirectContributorID() {
+	m.direct_contributor_id = nil
+	m.clearedFields[detail.FieldDirectContributorID] = struct{}{}
+}
+
+// DirectContributorIDCleared returns if the "direct_contributor_id" field was cleared in this mutation.
+func (m *DetailMutation) DirectContributorIDCleared() bool {
+	_, ok := m.clearedFields[detail.FieldDirectContributorID]
+	return ok
+}
+
+// ResetDirectContributorID resets all changes to the "direct_contributor_id" field.
+func (m *DetailMutation) ResetDirectContributorID() {
+	m.direct_contributor_id = nil
+	delete(m.clearedFields, detail.FieldDirectContributorID)
+}
+
 // SetGoodID sets the "good_id" field.
 func (m *DetailMutation) SetGoodID(u uuid.UUID) {
 	m.good_id = &u
@@ -733,7 +779,6 @@ func (m *DetailMutation) ResetPaymentCoinTypeID() {
 // SetPaymentCoinUsdCurrency sets the "payment_coin_usd_currency" field.
 func (m *DetailMutation) SetPaymentCoinUsdCurrency(d decimal.Decimal) {
 	m.payment_coin_usd_currency = &d
-	m.addpayment_coin_usd_currency = nil
 }
 
 // PaymentCoinUsdCurrency returns the value of the "payment_coin_usd_currency" field in the mutation.
@@ -762,28 +807,9 @@ func (m *DetailMutation) OldPaymentCoinUsdCurrency(ctx context.Context) (v decim
 	return oldValue.PaymentCoinUsdCurrency, nil
 }
 
-// AddPaymentCoinUsdCurrency adds d to the "payment_coin_usd_currency" field.
-func (m *DetailMutation) AddPaymentCoinUsdCurrency(d decimal.Decimal) {
-	if m.addpayment_coin_usd_currency != nil {
-		*m.addpayment_coin_usd_currency = m.addpayment_coin_usd_currency.Add(d)
-	} else {
-		m.addpayment_coin_usd_currency = &d
-	}
-}
-
-// AddedPaymentCoinUsdCurrency returns the value that was added to the "payment_coin_usd_currency" field in this mutation.
-func (m *DetailMutation) AddedPaymentCoinUsdCurrency() (r decimal.Decimal, exists bool) {
-	v := m.addpayment_coin_usd_currency
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearPaymentCoinUsdCurrency clears the value of the "payment_coin_usd_currency" field.
 func (m *DetailMutation) ClearPaymentCoinUsdCurrency() {
 	m.payment_coin_usd_currency = nil
-	m.addpayment_coin_usd_currency = nil
 	m.clearedFields[detail.FieldPaymentCoinUsdCurrency] = struct{}{}
 }
 
@@ -796,7 +822,6 @@ func (m *DetailMutation) PaymentCoinUsdCurrencyCleared() bool {
 // ResetPaymentCoinUsdCurrency resets all changes to the "payment_coin_usd_currency" field.
 func (m *DetailMutation) ResetPaymentCoinUsdCurrency() {
 	m.payment_coin_usd_currency = nil
-	m.addpayment_coin_usd_currency = nil
 	delete(m.clearedFields, detail.FieldPaymentCoinUsdCurrency)
 }
 
@@ -873,7 +898,6 @@ func (m *DetailMutation) ResetUnits() {
 // SetAmount sets the "amount" field.
 func (m *DetailMutation) SetAmount(d decimal.Decimal) {
 	m.amount = &d
-	m.addamount = nil
 }
 
 // Amount returns the value of the "amount" field in the mutation.
@@ -902,28 +926,9 @@ func (m *DetailMutation) OldAmount(ctx context.Context) (v decimal.Decimal, err 
 	return oldValue.Amount, nil
 }
 
-// AddAmount adds d to the "amount" field.
-func (m *DetailMutation) AddAmount(d decimal.Decimal) {
-	if m.addamount != nil {
-		*m.addamount = m.addamount.Add(d)
-	} else {
-		m.addamount = &d
-	}
-}
-
-// AddedAmount returns the value that was added to the "amount" field in this mutation.
-func (m *DetailMutation) AddedAmount() (r decimal.Decimal, exists bool) {
-	v := m.addamount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearAmount clears the value of the "amount" field.
 func (m *DetailMutation) ClearAmount() {
 	m.amount = nil
-	m.addamount = nil
 	m.clearedFields[detail.FieldAmount] = struct{}{}
 }
 
@@ -936,14 +941,12 @@ func (m *DetailMutation) AmountCleared() bool {
 // ResetAmount resets all changes to the "amount" field.
 func (m *DetailMutation) ResetAmount() {
 	m.amount = nil
-	m.addamount = nil
 	delete(m.clearedFields, detail.FieldAmount)
 }
 
 // SetUsdAmount sets the "usd_amount" field.
 func (m *DetailMutation) SetUsdAmount(d decimal.Decimal) {
 	m.usd_amount = &d
-	m.addusd_amount = nil
 }
 
 // UsdAmount returns the value of the "usd_amount" field in the mutation.
@@ -972,28 +975,9 @@ func (m *DetailMutation) OldUsdAmount(ctx context.Context) (v decimal.Decimal, e
 	return oldValue.UsdAmount, nil
 }
 
-// AddUsdAmount adds d to the "usd_amount" field.
-func (m *DetailMutation) AddUsdAmount(d decimal.Decimal) {
-	if m.addusd_amount != nil {
-		*m.addusd_amount = m.addusd_amount.Add(d)
-	} else {
-		m.addusd_amount = &d
-	}
-}
-
-// AddedUsdAmount returns the value that was added to the "usd_amount" field in this mutation.
-func (m *DetailMutation) AddedUsdAmount() (r decimal.Decimal, exists bool) {
-	v := m.addusd_amount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearUsdAmount clears the value of the "usd_amount" field.
 func (m *DetailMutation) ClearUsdAmount() {
 	m.usd_amount = nil
-	m.addusd_amount = nil
 	m.clearedFields[detail.FieldUsdAmount] = struct{}{}
 }
 
@@ -1006,14 +990,12 @@ func (m *DetailMutation) UsdAmountCleared() bool {
 // ResetUsdAmount resets all changes to the "usd_amount" field.
 func (m *DetailMutation) ResetUsdAmount() {
 	m.usd_amount = nil
-	m.addusd_amount = nil
 	delete(m.clearedFields, detail.FieldUsdAmount)
 }
 
 // SetCommission sets the "commission" field.
 func (m *DetailMutation) SetCommission(d decimal.Decimal) {
 	m.commission = &d
-	m.addcommission = nil
 }
 
 // Commission returns the value of the "commission" field in the mutation.
@@ -1042,28 +1024,9 @@ func (m *DetailMutation) OldCommission(ctx context.Context) (v decimal.Decimal, 
 	return oldValue.Commission, nil
 }
 
-// AddCommission adds d to the "commission" field.
-func (m *DetailMutation) AddCommission(d decimal.Decimal) {
-	if m.addcommission != nil {
-		*m.addcommission = m.addcommission.Add(d)
-	} else {
-		m.addcommission = &d
-	}
-}
-
-// AddedCommission returns the value that was added to the "commission" field in this mutation.
-func (m *DetailMutation) AddedCommission() (r decimal.Decimal, exists bool) {
-	v := m.addcommission
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearCommission clears the value of the "commission" field.
 func (m *DetailMutation) ClearCommission() {
 	m.commission = nil
-	m.addcommission = nil
 	m.clearedFields[detail.FieldCommission] = struct{}{}
 }
 
@@ -1076,7 +1039,6 @@ func (m *DetailMutation) CommissionCleared() bool {
 // ResetCommission resets all changes to the "commission" field.
 func (m *DetailMutation) ResetCommission() {
 	m.commission = nil
-	m.addcommission = nil
 	delete(m.clearedFields, detail.FieldCommission)
 }
 
@@ -1099,7 +1061,7 @@ func (m *DetailMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DetailMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, detail.FieldCreatedAt)
 	}
@@ -1114,6 +1076,9 @@ func (m *DetailMutation) Fields() []string {
 	}
 	if m.user_id != nil {
 		fields = append(fields, detail.FieldUserID)
+	}
+	if m.direct_contributor_id != nil {
+		fields = append(fields, detail.FieldDirectContributorID)
 	}
 	if m.good_id != nil {
 		fields = append(fields, detail.FieldGoodID)
@@ -1166,6 +1131,8 @@ func (m *DetailMutation) Field(name string) (ent.Value, bool) {
 		return m.AppID()
 	case detail.FieldUserID:
 		return m.UserID()
+	case detail.FieldDirectContributorID:
+		return m.DirectContributorID()
 	case detail.FieldGoodID:
 		return m.GoodID()
 	case detail.FieldOrderID:
@@ -1207,6 +1174,8 @@ func (m *DetailMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldAppID(ctx)
 	case detail.FieldUserID:
 		return m.OldUserID(ctx)
+	case detail.FieldDirectContributorID:
+		return m.OldDirectContributorID(ctx)
 	case detail.FieldGoodID:
 		return m.OldGoodID(ctx)
 	case detail.FieldOrderID:
@@ -1272,6 +1241,13 @@ func (m *DetailMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
+		return nil
+	case detail.FieldDirectContributorID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDirectContributorID(v)
 		return nil
 	case detail.FieldGoodID:
 		v, ok := value.(uuid.UUID)
@@ -1367,20 +1343,8 @@ func (m *DetailMutation) AddedFields() []string {
 	if m.adddeleted_at != nil {
 		fields = append(fields, detail.FieldDeletedAt)
 	}
-	if m.addpayment_coin_usd_currency != nil {
-		fields = append(fields, detail.FieldPaymentCoinUsdCurrency)
-	}
 	if m.addunits != nil {
 		fields = append(fields, detail.FieldUnits)
-	}
-	if m.addamount != nil {
-		fields = append(fields, detail.FieldAmount)
-	}
-	if m.addusd_amount != nil {
-		fields = append(fields, detail.FieldUsdAmount)
-	}
-	if m.addcommission != nil {
-		fields = append(fields, detail.FieldCommission)
 	}
 	return fields
 }
@@ -1396,16 +1360,8 @@ func (m *DetailMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedAt()
 	case detail.FieldDeletedAt:
 		return m.AddedDeletedAt()
-	case detail.FieldPaymentCoinUsdCurrency:
-		return m.AddedPaymentCoinUsdCurrency()
 	case detail.FieldUnits:
 		return m.AddedUnits()
-	case detail.FieldAmount:
-		return m.AddedAmount()
-	case detail.FieldUsdAmount:
-		return m.AddedUsdAmount()
-	case detail.FieldCommission:
-		return m.AddedCommission()
 	}
 	return nil, false
 }
@@ -1436,40 +1392,12 @@ func (m *DetailMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddDeletedAt(v)
 		return nil
-	case detail.FieldPaymentCoinUsdCurrency:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddPaymentCoinUsdCurrency(v)
-		return nil
 	case detail.FieldUnits:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUnits(v)
-		return nil
-	case detail.FieldAmount:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddAmount(v)
-		return nil
-	case detail.FieldUsdAmount:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUsdAmount(v)
-		return nil
-	case detail.FieldCommission:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCommission(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Detail numeric field %s", name)
@@ -1484,6 +1412,9 @@ func (m *DetailMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(detail.FieldUserID) {
 		fields = append(fields, detail.FieldUserID)
+	}
+	if m.FieldCleared(detail.FieldDirectContributorID) {
+		fields = append(fields, detail.FieldDirectContributorID)
 	}
 	if m.FieldCleared(detail.FieldGoodID) {
 		fields = append(fields, detail.FieldGoodID)
@@ -1537,6 +1468,9 @@ func (m *DetailMutation) ClearField(name string) error {
 		return nil
 	case detail.FieldUserID:
 		m.ClearUserID()
+		return nil
+	case detail.FieldDirectContributorID:
+		m.ClearDirectContributorID()
 		return nil
 	case detail.FieldGoodID:
 		m.ClearGoodID()
@@ -1593,6 +1527,9 @@ func (m *DetailMutation) ResetField(name string) error {
 		return nil
 	case detail.FieldUserID:
 		m.ResetUserID()
+		return nil
+	case detail.FieldDirectContributorID:
+		m.ResetDirectContributorID()
 		return nil
 	case detail.FieldGoodID:
 		m.ResetGoodID()
@@ -1682,35 +1619,31 @@ func (m *DetailMutation) ResetEdge(name string) error {
 // GeneralMutation represents an operation that mutates the General nodes in the graph.
 type GeneralMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *uuid.UUID
-	created_at          *uint32
-	addcreated_at       *int32
-	updated_at          *uint32
-	addupdated_at       *int32
-	deleted_at          *uint32
-	adddeleted_at       *int32
-	app_id              *uuid.UUID
-	user_id             *uuid.UUID
-	good_id             *uuid.UUID
-	coin_type_id        *uuid.UUID
-	total_units         *uint32
-	addtotal_units      *int32
-	self_units          *uint32
-	addself_units       *int32
-	total_amount        *decimal.Decimal
-	addtotal_amount     *decimal.Decimal
-	self_amount         *decimal.Decimal
-	addself_amount      *decimal.Decimal
-	total_commission    *decimal.Decimal
-	addtotal_commission *decimal.Decimal
-	self_commission     *decimal.Decimal
-	addself_commission  *decimal.Decimal
-	clearedFields       map[string]struct{}
-	done                bool
-	oldValue            func(context.Context) (*General, error)
-	predicates          []predicate.General
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	created_at       *uint32
+	addcreated_at    *int32
+	updated_at       *uint32
+	addupdated_at    *int32
+	deleted_at       *uint32
+	adddeleted_at    *int32
+	app_id           *uuid.UUID
+	user_id          *uuid.UUID
+	good_id          *uuid.UUID
+	coin_type_id     *uuid.UUID
+	total_units      *uint32
+	addtotal_units   *int32
+	self_units       *uint32
+	addself_units    *int32
+	total_amount     *decimal.Decimal
+	self_amount      *decimal.Decimal
+	total_commission *decimal.Decimal
+	self_commission  *decimal.Decimal
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*General, error)
+	predicates       []predicate.General
 }
 
 var _ ent.Mutation = (*GeneralMutation)(nil)
@@ -2324,7 +2257,6 @@ func (m *GeneralMutation) ResetSelfUnits() {
 // SetTotalAmount sets the "total_amount" field.
 func (m *GeneralMutation) SetTotalAmount(d decimal.Decimal) {
 	m.total_amount = &d
-	m.addtotal_amount = nil
 }
 
 // TotalAmount returns the value of the "total_amount" field in the mutation.
@@ -2353,28 +2285,9 @@ func (m *GeneralMutation) OldTotalAmount(ctx context.Context) (v decimal.Decimal
 	return oldValue.TotalAmount, nil
 }
 
-// AddTotalAmount adds d to the "total_amount" field.
-func (m *GeneralMutation) AddTotalAmount(d decimal.Decimal) {
-	if m.addtotal_amount != nil {
-		*m.addtotal_amount = m.addtotal_amount.Add(d)
-	} else {
-		m.addtotal_amount = &d
-	}
-}
-
-// AddedTotalAmount returns the value that was added to the "total_amount" field in this mutation.
-func (m *GeneralMutation) AddedTotalAmount() (r decimal.Decimal, exists bool) {
-	v := m.addtotal_amount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearTotalAmount clears the value of the "total_amount" field.
 func (m *GeneralMutation) ClearTotalAmount() {
 	m.total_amount = nil
-	m.addtotal_amount = nil
 	m.clearedFields[general.FieldTotalAmount] = struct{}{}
 }
 
@@ -2387,14 +2300,12 @@ func (m *GeneralMutation) TotalAmountCleared() bool {
 // ResetTotalAmount resets all changes to the "total_amount" field.
 func (m *GeneralMutation) ResetTotalAmount() {
 	m.total_amount = nil
-	m.addtotal_amount = nil
 	delete(m.clearedFields, general.FieldTotalAmount)
 }
 
 // SetSelfAmount sets the "self_amount" field.
 func (m *GeneralMutation) SetSelfAmount(d decimal.Decimal) {
 	m.self_amount = &d
-	m.addself_amount = nil
 }
 
 // SelfAmount returns the value of the "self_amount" field in the mutation.
@@ -2423,28 +2334,9 @@ func (m *GeneralMutation) OldSelfAmount(ctx context.Context) (v decimal.Decimal,
 	return oldValue.SelfAmount, nil
 }
 
-// AddSelfAmount adds d to the "self_amount" field.
-func (m *GeneralMutation) AddSelfAmount(d decimal.Decimal) {
-	if m.addself_amount != nil {
-		*m.addself_amount = m.addself_amount.Add(d)
-	} else {
-		m.addself_amount = &d
-	}
-}
-
-// AddedSelfAmount returns the value that was added to the "self_amount" field in this mutation.
-func (m *GeneralMutation) AddedSelfAmount() (r decimal.Decimal, exists bool) {
-	v := m.addself_amount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearSelfAmount clears the value of the "self_amount" field.
 func (m *GeneralMutation) ClearSelfAmount() {
 	m.self_amount = nil
-	m.addself_amount = nil
 	m.clearedFields[general.FieldSelfAmount] = struct{}{}
 }
 
@@ -2457,14 +2349,12 @@ func (m *GeneralMutation) SelfAmountCleared() bool {
 // ResetSelfAmount resets all changes to the "self_amount" field.
 func (m *GeneralMutation) ResetSelfAmount() {
 	m.self_amount = nil
-	m.addself_amount = nil
 	delete(m.clearedFields, general.FieldSelfAmount)
 }
 
 // SetTotalCommission sets the "total_commission" field.
 func (m *GeneralMutation) SetTotalCommission(d decimal.Decimal) {
 	m.total_commission = &d
-	m.addtotal_commission = nil
 }
 
 // TotalCommission returns the value of the "total_commission" field in the mutation.
@@ -2493,28 +2383,9 @@ func (m *GeneralMutation) OldTotalCommission(ctx context.Context) (v decimal.Dec
 	return oldValue.TotalCommission, nil
 }
 
-// AddTotalCommission adds d to the "total_commission" field.
-func (m *GeneralMutation) AddTotalCommission(d decimal.Decimal) {
-	if m.addtotal_commission != nil {
-		*m.addtotal_commission = m.addtotal_commission.Add(d)
-	} else {
-		m.addtotal_commission = &d
-	}
-}
-
-// AddedTotalCommission returns the value that was added to the "total_commission" field in this mutation.
-func (m *GeneralMutation) AddedTotalCommission() (r decimal.Decimal, exists bool) {
-	v := m.addtotal_commission
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearTotalCommission clears the value of the "total_commission" field.
 func (m *GeneralMutation) ClearTotalCommission() {
 	m.total_commission = nil
-	m.addtotal_commission = nil
 	m.clearedFields[general.FieldTotalCommission] = struct{}{}
 }
 
@@ -2527,14 +2398,12 @@ func (m *GeneralMutation) TotalCommissionCleared() bool {
 // ResetTotalCommission resets all changes to the "total_commission" field.
 func (m *GeneralMutation) ResetTotalCommission() {
 	m.total_commission = nil
-	m.addtotal_commission = nil
 	delete(m.clearedFields, general.FieldTotalCommission)
 }
 
 // SetSelfCommission sets the "self_commission" field.
 func (m *GeneralMutation) SetSelfCommission(d decimal.Decimal) {
 	m.self_commission = &d
-	m.addself_commission = nil
 }
 
 // SelfCommission returns the value of the "self_commission" field in the mutation.
@@ -2563,28 +2432,9 @@ func (m *GeneralMutation) OldSelfCommission(ctx context.Context) (v decimal.Deci
 	return oldValue.SelfCommission, nil
 }
 
-// AddSelfCommission adds d to the "self_commission" field.
-func (m *GeneralMutation) AddSelfCommission(d decimal.Decimal) {
-	if m.addself_commission != nil {
-		*m.addself_commission = m.addself_commission.Add(d)
-	} else {
-		m.addself_commission = &d
-	}
-}
-
-// AddedSelfCommission returns the value that was added to the "self_commission" field in this mutation.
-func (m *GeneralMutation) AddedSelfCommission() (r decimal.Decimal, exists bool) {
-	v := m.addself_commission
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearSelfCommission clears the value of the "self_commission" field.
 func (m *GeneralMutation) ClearSelfCommission() {
 	m.self_commission = nil
-	m.addself_commission = nil
 	m.clearedFields[general.FieldSelfCommission] = struct{}{}
 }
 
@@ -2597,7 +2447,6 @@ func (m *GeneralMutation) SelfCommissionCleared() bool {
 // ResetSelfCommission resets all changes to the "self_commission" field.
 func (m *GeneralMutation) ResetSelfCommission() {
 	m.self_commission = nil
-	m.addself_commission = nil
 	delete(m.clearedFields, general.FieldSelfCommission)
 }
 
@@ -2852,18 +2701,6 @@ func (m *GeneralMutation) AddedFields() []string {
 	if m.addself_units != nil {
 		fields = append(fields, general.FieldSelfUnits)
 	}
-	if m.addtotal_amount != nil {
-		fields = append(fields, general.FieldTotalAmount)
-	}
-	if m.addself_amount != nil {
-		fields = append(fields, general.FieldSelfAmount)
-	}
-	if m.addtotal_commission != nil {
-		fields = append(fields, general.FieldTotalCommission)
-	}
-	if m.addself_commission != nil {
-		fields = append(fields, general.FieldSelfCommission)
-	}
 	return fields
 }
 
@@ -2882,14 +2719,6 @@ func (m *GeneralMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedTotalUnits()
 	case general.FieldSelfUnits:
 		return m.AddedSelfUnits()
-	case general.FieldTotalAmount:
-		return m.AddedTotalAmount()
-	case general.FieldSelfAmount:
-		return m.AddedSelfAmount()
-	case general.FieldTotalCommission:
-		return m.AddedTotalCommission()
-	case general.FieldSelfCommission:
-		return m.AddedSelfCommission()
 	}
 	return nil, false
 }
@@ -2933,34 +2762,6 @@ func (m *GeneralMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSelfUnits(v)
-		return nil
-	case general.FieldTotalAmount:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTotalAmount(v)
-		return nil
-	case general.FieldSelfAmount:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddSelfAmount(v)
-		return nil
-	case general.FieldTotalCommission:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddTotalCommission(v)
-		return nil
-	case general.FieldSelfCommission:
-		v, ok := value.(decimal.Decimal)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddSelfCommission(v)
 		return nil
 	}
 	return fmt.Errorf("unknown General numeric field %s", name)

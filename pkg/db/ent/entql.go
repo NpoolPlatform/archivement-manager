@@ -31,17 +31,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			detail.FieldDeletedAt:              {Type: field.TypeUint32, Column: detail.FieldDeletedAt},
 			detail.FieldAppID:                  {Type: field.TypeUUID, Column: detail.FieldAppID},
 			detail.FieldUserID:                 {Type: field.TypeUUID, Column: detail.FieldUserID},
+			detail.FieldDirectContributorID:    {Type: field.TypeUUID, Column: detail.FieldDirectContributorID},
 			detail.FieldGoodID:                 {Type: field.TypeUUID, Column: detail.FieldGoodID},
 			detail.FieldOrderID:                {Type: field.TypeUUID, Column: detail.FieldOrderID},
 			detail.FieldSelfOrder:              {Type: field.TypeBool, Column: detail.FieldSelfOrder},
 			detail.FieldPaymentID:              {Type: field.TypeUUID, Column: detail.FieldPaymentID},
 			detail.FieldCoinTypeID:             {Type: field.TypeUUID, Column: detail.FieldCoinTypeID},
 			detail.FieldPaymentCoinTypeID:      {Type: field.TypeUUID, Column: detail.FieldPaymentCoinTypeID},
-			detail.FieldPaymentCoinUsdCurrency: {Type: field.TypeFloat64, Column: detail.FieldPaymentCoinUsdCurrency},
+			detail.FieldPaymentCoinUsdCurrency: {Type: field.TypeOther, Column: detail.FieldPaymentCoinUsdCurrency},
 			detail.FieldUnits:                  {Type: field.TypeUint32, Column: detail.FieldUnits},
-			detail.FieldAmount:                 {Type: field.TypeFloat64, Column: detail.FieldAmount},
-			detail.FieldUsdAmount:              {Type: field.TypeFloat64, Column: detail.FieldUsdAmount},
-			detail.FieldCommission:             {Type: field.TypeFloat64, Column: detail.FieldCommission},
+			detail.FieldAmount:                 {Type: field.TypeOther, Column: detail.FieldAmount},
+			detail.FieldUsdAmount:              {Type: field.TypeOther, Column: detail.FieldUsdAmount},
+			detail.FieldCommission:             {Type: field.TypeOther, Column: detail.FieldCommission},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -64,10 +65,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			general.FieldCoinTypeID:      {Type: field.TypeUUID, Column: general.FieldCoinTypeID},
 			general.FieldTotalUnits:      {Type: field.TypeUint32, Column: general.FieldTotalUnits},
 			general.FieldSelfUnits:       {Type: field.TypeUint32, Column: general.FieldSelfUnits},
-			general.FieldTotalAmount:     {Type: field.TypeFloat64, Column: general.FieldTotalAmount},
-			general.FieldSelfAmount:      {Type: field.TypeFloat64, Column: general.FieldSelfAmount},
-			general.FieldTotalCommission: {Type: field.TypeFloat64, Column: general.FieldTotalCommission},
-			general.FieldSelfCommission:  {Type: field.TypeFloat64, Column: general.FieldSelfCommission},
+			general.FieldTotalAmount:     {Type: field.TypeOther, Column: general.FieldTotalAmount},
+			general.FieldSelfAmount:      {Type: field.TypeOther, Column: general.FieldSelfAmount},
+			general.FieldTotalCommission: {Type: field.TypeOther, Column: general.FieldTotalCommission},
+			general.FieldSelfCommission:  {Type: field.TypeOther, Column: general.FieldSelfCommission},
 		},
 	}
 	return graph
@@ -143,6 +144,11 @@ func (f *DetailFilter) WhereUserID(p entql.ValueP) {
 	f.Where(p.Field(detail.FieldUserID))
 }
 
+// WhereDirectContributorID applies the entql [16]byte predicate on the direct_contributor_id field.
+func (f *DetailFilter) WhereDirectContributorID(p entql.ValueP) {
+	f.Where(p.Field(detail.FieldDirectContributorID))
+}
+
 // WhereGoodID applies the entql [16]byte predicate on the good_id field.
 func (f *DetailFilter) WhereGoodID(p entql.ValueP) {
 	f.Where(p.Field(detail.FieldGoodID))
@@ -173,8 +179,8 @@ func (f *DetailFilter) WherePaymentCoinTypeID(p entql.ValueP) {
 	f.Where(p.Field(detail.FieldPaymentCoinTypeID))
 }
 
-// WherePaymentCoinUsdCurrency applies the entql float64 predicate on the payment_coin_usd_currency field.
-func (f *DetailFilter) WherePaymentCoinUsdCurrency(p entql.Float64P) {
+// WherePaymentCoinUsdCurrency applies the entql other predicate on the payment_coin_usd_currency field.
+func (f *DetailFilter) WherePaymentCoinUsdCurrency(p entql.OtherP) {
 	f.Where(p.Field(detail.FieldPaymentCoinUsdCurrency))
 }
 
@@ -183,18 +189,18 @@ func (f *DetailFilter) WhereUnits(p entql.Uint32P) {
 	f.Where(p.Field(detail.FieldUnits))
 }
 
-// WhereAmount applies the entql float64 predicate on the amount field.
-func (f *DetailFilter) WhereAmount(p entql.Float64P) {
+// WhereAmount applies the entql other predicate on the amount field.
+func (f *DetailFilter) WhereAmount(p entql.OtherP) {
 	f.Where(p.Field(detail.FieldAmount))
 }
 
-// WhereUsdAmount applies the entql float64 predicate on the usd_amount field.
-func (f *DetailFilter) WhereUsdAmount(p entql.Float64P) {
+// WhereUsdAmount applies the entql other predicate on the usd_amount field.
+func (f *DetailFilter) WhereUsdAmount(p entql.OtherP) {
 	f.Where(p.Field(detail.FieldUsdAmount))
 }
 
-// WhereCommission applies the entql float64 predicate on the commission field.
-func (f *DetailFilter) WhereCommission(p entql.Float64P) {
+// WhereCommission applies the entql other predicate on the commission field.
+func (f *DetailFilter) WhereCommission(p entql.OtherP) {
 	f.Where(p.Field(detail.FieldCommission))
 }
 
@@ -282,22 +288,22 @@ func (f *GeneralFilter) WhereSelfUnits(p entql.Uint32P) {
 	f.Where(p.Field(general.FieldSelfUnits))
 }
 
-// WhereTotalAmount applies the entql float64 predicate on the total_amount field.
-func (f *GeneralFilter) WhereTotalAmount(p entql.Float64P) {
+// WhereTotalAmount applies the entql other predicate on the total_amount field.
+func (f *GeneralFilter) WhereTotalAmount(p entql.OtherP) {
 	f.Where(p.Field(general.FieldTotalAmount))
 }
 
-// WhereSelfAmount applies the entql float64 predicate on the self_amount field.
-func (f *GeneralFilter) WhereSelfAmount(p entql.Float64P) {
+// WhereSelfAmount applies the entql other predicate on the self_amount field.
+func (f *GeneralFilter) WhereSelfAmount(p entql.OtherP) {
 	f.Where(p.Field(general.FieldSelfAmount))
 }
 
-// WhereTotalCommission applies the entql float64 predicate on the total_commission field.
-func (f *GeneralFilter) WhereTotalCommission(p entql.Float64P) {
+// WhereTotalCommission applies the entql other predicate on the total_commission field.
+func (f *GeneralFilter) WhereTotalCommission(p entql.OtherP) {
 	f.Where(p.Field(general.FieldTotalCommission))
 }
 
-// WhereSelfCommission applies the entql float64 predicate on the self_commission field.
-func (f *GeneralFilter) WhereSelfCommission(p entql.Float64P) {
+// WhereSelfCommission applies the entql other predicate on the self_commission field.
+func (f *GeneralFilter) WhereSelfCommission(p entql.OtherP) {
 	f.Where(p.Field(general.FieldSelfCommission))
 }
