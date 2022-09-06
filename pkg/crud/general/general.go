@@ -106,7 +106,7 @@ func CreateBulk(ctx context.Context, in []*npool.GeneralReq) ([]*ent.General, er
 	return rows, nil
 }
 
-func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne, err error) { //nolint
+func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne, err error) {
 	totalAmount := decimal.NewFromInt(0)
 	if in.TotalAmount != nil {
 		totalAmount, err = decimal.NewFromString(in.GetTotalAmount())
@@ -115,20 +115,12 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 		}
 	}
 
-	if totalAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("TotalAmount < 0")
-	}
-
 	selfAmount := decimal.NewFromInt(0)
 	if in.SelfAmount != nil {
 		selfAmount, err = decimal.NewFromString(in.GetSelfAmount())
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	if selfAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("SelfAmount < 0")
 	}
 
 	totalCommission := decimal.NewFromInt(0)
