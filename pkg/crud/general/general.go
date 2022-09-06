@@ -131,6 +131,10 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 		}
 	}
 
+	if totalCommission.Cmp(decimal.NewFromInt(0)) < 0 {
+		return nil, fmt.Errorf("TotalCommission < 0")
+	}
+
 	selfCommission := decimal.NewFromInt(0)
 	if in.SelfCommission != nil {
 		selfCommission, err = decimal.NewFromString(in.GetSelfCommission())
