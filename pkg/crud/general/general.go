@@ -115,20 +115,12 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 		}
 	}
 
-	if totalAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("TotalAmount < 0")
-	}
-
 	selfAmount := decimal.NewFromInt(0)
 	if in.SelfAmount != nil {
 		selfAmount, err = decimal.NewFromString(in.GetSelfAmount())
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	if selfAmount.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("SelfAmount < 0")
 	}
 
 	totalCommission := decimal.NewFromInt(0)
@@ -139,20 +131,12 @@ func UpdateSet(info *ent.General, in *npool.GeneralReq) (u *ent.GeneralUpdateOne
 		}
 	}
 
-	if totalCommission.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("TotalCommission < 0")
-	}
-
 	selfCommission := decimal.NewFromInt(0)
 	if in.SelfCommission != nil {
 		selfCommission, err = decimal.NewFromString(in.GetSelfCommission())
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	if selfCommission.Cmp(decimal.NewFromInt(0)) < 0 {
-		return nil, fmt.Errorf("SelfCommission < 0")
 	}
 
 	stm := info.Update()
